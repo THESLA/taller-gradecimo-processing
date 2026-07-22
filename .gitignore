@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+venv/
+env/
+.env
+
+# Audio generado
+*.wav
+*.mp3
+
+# IDE
+.vscode/
+.idea/
+
+# Sistema
+*.log
+.DS_Store
+Thumbs.db
