@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taller Gradécimo Processing</title>
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --secondary: #00cec9;
+            --bg: #0a0a1a;
+            --card: #1a1a3e;
+            --text: #e0e0f0;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        header {
+            text-align: center;
+            padding: 4rem 2rem 2rem;
+            width: 100%;
+            background: linear-gradient(135deg, #6c5ce7 0%, #00cec9 100%);
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+        }
+        header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        header p {
+            font-size: 1.2rem;
+            color: rgba(255,255,255,0.9);
+            margin-top: 0.5rem;
+        }
+        main {
+            max-width: 900px;
+            padding: 2rem;
+            width: 100%;
+            flex: 1;
+        }
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            border: 1px solid rgba(108, 92, 231, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(108, 92, 231, 0.2);
+        }
+        .card h2 {
+            color: var(--secondary);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        .card h2 i { margin-right: 0.5rem; }
+        .card p { line-height: 1.7; color: #b0b0d0; }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        .tool {
+            text-align: center;
+            padding: 1.5rem;
+        }
+        .tool .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        .tool h3 { color: var(--primary); margin-bottom: 0.5rem; }
+        .tool p { font-size: 0.9rem; }
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+            font-size: 0.9rem;
+            width: 100%;
+        }
+        .badge {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
+        }
+        @media (max-width: 600px) {
+            header h1 { font-size: 2rem; }
+            header { padding: 2rem 1rem 3rem; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1> Taller Gradécimo Processing</h1>
+        <p>Generación musical con Inteligencia Artificial</p>
+    </header>
+
+    <main>
+        <div class="card">
+            <h2> Sobre el proyecto</h2>
+            <p>
+                Este repositorio contiene herramientas y scripts para la generación de música 
+                utilizando modelos de IA locales. Desarrollado como material didáctico para 
+                el taller de grado décimo, explorando la intersección entre creatividad musical 
+                y tecnología de aprendizaje automático.
+            </p>
+        </div>
+
+        <div class="card">
+            <h2> Herramientas</h2>
+            <div class="grid">
+                <div class="tool">
+                    <div class="icon"> </div>
+                    <h3>MusicGen (Meta)</h3>
+                    <p>Modelo de generación musical de alta calidad. Produce audio realista a partir de descripciones textuales.</p>
+                </div>
+                <div class="tool">
+                    <div class="icon"> </div>
+                    <h3>Riffusion</h3>
+                    <p>Generación experimental basada en espectrogramas y difusión. Ideal para explorar sonidos únicos.</p>
+                </div>
+                <div class="tool">
+                    <div class="icon"> </div>
+                    <h3>Procesamiento</h3>
+                    <p>Herramientas de post-procesamiento de audio con libros, scipy y torchaudio.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>  Stack tecnológico</h2>
+            <p>
+                <span class="badge">Python 3.11</span>
+                <span class="badge">PyTorch 2.8 + CUDA 12.8</span>
+                <span class="badge">NVIDIA RTX 5060</span>
+                <span class="badge">Transformers</span>
+                <span class="badge">Diffusers</span>
+                <span class="badge">Librosa</span>
+            </p>
+        </div>
+
+        <div class="card">
+            <h2>  Cómo usar</h2>
+            <p>
+                <strong>1. Clona el repositorio:</strong><br>
+                <code>git clone https://github.com/THESLA/taller-gradecimo-processing.git</code><br><br>
+                <strong>2. Genera música con MusicGen:</strong><br>
+                <code>python musicgen_generate.py "una canción alegre de cumbia con acordeón y tambora"</code><br><br>
+                <strong>3. Explora y experimenta</strong> con diferentes prompts en español.
+            </p>
+        </div>
+    </main>
+
+    <footer>
+        <p>Taller Gradécimo Processing &bull; Hecho con   para la educación musical</p>
+    </footer>
+</body>
+</html>
