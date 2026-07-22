@@ -3,21 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Taller Processing - Día 2: Interactividad y Animación</title>
+    <title>Taller Processing - Día 2: Eventos, Aleatoriedad y Animación</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js"></script>
     <style>
         :root {
             --primary: #e74c3c;
             --secondary: #f39c12;
             --accent: #2ecc71;
+            --blue: #3498db;
             --bg: #0d0d1a;
             --card: #1a1a2e;
             --code-bg: #16213e;
             --text: #e8e8f0;
             --text-dim: #9898b0;
             --border: #2a2a4a;
-            --success: #2ecc71;
-            --error: #e74c3c;
+            --notebook: #f5e6c8;
+            --notebook-text: #2c1810;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -29,38 +30,23 @@
 
         /* HEADER */
         header {
-            background: linear-gradient(135deg, #e74c3c 0%, #f39c12 50%, #2ecc71 100%);
-            padding: 3rem 2rem 4rem;
+            background: linear-gradient(135deg, #2c3e50, #3498db, #2ecc71);
+            padding: 3rem 2rem 4.5rem;
             text-align: center;
-            clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
             position: relative;
-            overflow: hidden;
-        }
-        header::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: repeating-linear-gradient(
-                45deg,
-                transparent,
-                transparent 20px,
-                rgba(255,255,255,0.05) 20px,
-                rgba(255,255,255,0.05) 40px
-            );
         }
         header h1 {
-            font-size: 2.8rem;
+            font-size: 2.5rem;
             font-weight: 900;
             color: white;
             text-shadow: 0 3px 15px rgba(0,0,0,0.3);
-            position: relative;
             letter-spacing: -1px;
         }
         header .subtitle {
             font-size: 1.2rem;
-            color: rgba(255,255,255,0.95);
+            color: rgba(255,255,255,0.9);
             margin-top: 0.5rem;
-            position: relative;
             font-weight: 300;
         }
         header .badge-day {
@@ -70,58 +56,91 @@
             color: white;
             padding: 0.3rem 1.2rem;
             border-radius: 20px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 600;
             margin-top: 0.8rem;
-            position: relative;
             border: 1px solid rgba(255,255,255,0.3);
         }
 
         /* MAIN */
         main {
-            max-width: 1100px;
-            margin: -2rem auto 0;
+            max-width: 960px;
+            margin: -2.5rem auto 0;
             padding: 0 1.5rem 3rem;
             position: relative;
             z-index: 1;
         }
 
-        /* OBJECTIVES */
+        /* OBJETIVOS */
         .objectives {
             background: var(--card);
             border-radius: 20px;
-            padding: 2rem;
+            padding: 1.8rem 2rem;
             border: 1px solid var(--border);
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
             margin-bottom: 2rem;
         }
         .objectives h2 {
-            grid-column: 1 / -1;
-            color: var(--secondary);
+            color: var(--blue);
             font-size: 1.3rem;
+            margin-bottom: 1rem;
         }
-        .objectives ul {
+        .objectives .grid-ob {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem 2rem;
+        }
+        .objectives .new { color: var(--accent); font-weight: 700; }
+        .objectives .old { color: var(--text-dim); }
+        .objectives li {
             list-style: none;
-        }
-        .objectives ul li {
-            padding: 0.4rem 0;
-            color: var(--text-dim);
+            padding: 0.3rem 0;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
-        .objectives ul li::before {
-            content: '>';
-            color: var(--accent);
+        .objectives li::before { font-weight: 700; font-family: monospace; }
+        .objectives .new::before { content: '+ '; color: var(--accent); }
+        .objectives .old::before { content: '> '; color: var(--blue); }
+
+        /* METHODOLOGY BAR */
+        .method-bar {
+            display: flex;
+            gap: 1rem;
+            background: rgba(52, 152, 219, 0.1);
+            border: 1px solid rgba(52, 152, 219, 0.3);
+            border-radius: 14px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 2rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .method-bar .step {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+        }
+        .method-bar .step-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            background: var(--blue);
+            color: white;
+            border-radius: 50%;
             font-weight: 700;
-            font-family: monospace;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+        .method-bar .arrow {
+            color: var(--text-dim);
+            font-size: 1.2rem;
         }
 
-        /* SECTION TITLES */
+        /* SECTION TITLE */
         .section-title {
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             font-weight: 800;
             margin: 2.5rem 0 1.5rem;
             display: flex;
@@ -137,271 +156,299 @@
             background: var(--primary);
             color: white;
             border-radius: 12px;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
+            flex-shrink: 0;
         }
 
-        /* EXAMPLE CARD */
-        .example {
+        /* EXERCISE CARD */
+        .exercise-card {
             background: var(--card);
             border-radius: 20px;
-            padding: 1.8rem;
-            margin-bottom: 1.5rem;
+            padding: 1.8rem 2rem;
+            margin-bottom: 2rem;
             border: 1px solid var(--border);
-            transition: border-color 0.3s;
+            border-left: 4px solid var(--blue);
         }
-        .example:hover {
-            border-color: var(--primary);
-        }
-        .example-header {
+        .exercise-card .ex-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 1rem;
             flex-wrap: wrap;
-            gap: 1rem;
+            gap: 0.5rem;
+            margin-bottom: 0.8rem;
         }
-        .example-header h3 {
+        .exercise-card .ex-header h3 {
             font-size: 1.2rem;
-            color: var(--secondary);
+            color: var(--blue);
         }
-        .example-header .tag {
-            display: inline-block;
-            background: rgba(231, 76, 60, 0.2);
-            color: var(--primary);
-            padding: 0.2rem 0.8rem;
-            border-radius: 12px;
-            font-size: 0.75rem;
+        .exercise-card .ex-header .tags {
+            display: flex;
+            gap: 0.4rem;
+            flex-wrap: wrap;
+        }
+        .exercise-card .ex-header .tags span {
+            background: rgba(52, 152, 219, 0.15);
+            color: var(--blue);
+            padding: 0.15rem 0.65rem;
+            border-radius: 10px;
+            font-size: 0.7rem;
             font-weight: 600;
-            margin-right: 0.4rem;
         }
-        .example-body {
+        .exercise-card .ex-desc {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            margin-bottom: 1.2rem;
+            line-height: 1.6;
+        }
+
+        /* DEMO + CODE SIDE BY SIDE */
+        .ex-demo-row {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 280px 1fr;
             gap: 1.5rem;
+            margin-bottom: 1.2rem;
             align-items: start;
         }
-        .example-body .canvas-container {
+        .ex-demo-row .demo-canvas {
             background: #111;
             border-radius: 12px;
             overflow: hidden;
             aspect-ratio: 1 / 1;
+            border: 2px solid var(--border);
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 2px solid var(--border);
-            min-height: 280px;
         }
-        .example-body .canvas-container canvas {
+        .ex-demo-row .demo-canvas canvas {
             display: block;
             max-width: 100%;
-            max-height: 100%;
         }
-        .example-body .code-box {
-            background: var(--code-bg);
-            border-radius: 12px;
-            overflow: hidden;
+
+        /* NOTEBOOK STEP */
+        .notebook-step {
+            background: var(--notebook);
+            border-radius: 14px;
+            padding: 1.2rem 1.5rem;
+            margin: 1rem 0;
+            border: 2px dashed #c4a97a;
+            position: relative;
         }
-        .example-body .code-box .code-header {
-            background: rgba(255,255,255,0.05);
-            padding: 0.5rem 1rem;
+        .notebook-step .step-label {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            font-size: 0.8rem;
-            color: var(--text-dim);
+            gap: 0.5rem;
+            margin-bottom: 0.8rem;
         }
-        .example-body .code-box .code-header button {
-            background: rgba(255,255,255,0.1);
-            border: 1px solid var(--border);
-            color: var(--text);
-            padding: 0.25rem 0.8rem;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.75rem;
-            transition: background 0.2s;
+        .notebook-step .step-label .icon {
+            font-size: 1.3rem;
         }
-        .example-body .code-box .code-header button:hover {
-            background: var(--primary);
-            color: white;
+        .notebook-step .step-label h4 {
+            color: var(--notebook-text);
+            font-size: 1rem;
         }
-        .example-body .code-box pre {
-            padding: 1rem;
-            overflow-x: auto;
-            font-size: 0.82rem;
-            line-height: 1.6;
-            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
-            color: #d4d4e8;
-            tab-size: 4;
-        }
-        .example-body .code-box pre .kw { color: #c792ea; }
-        .example-body .code-box pre .fn { color: #82aaff; }
-        .example-body .code-box pre .num { color: #f78c6c; }
-        .example-body .code-box pre .str { color: #c3e88d; }
-        .example-body .code-box pre .cm { color: #546e7a; font-style: italic; }
-        .example-body .code-box pre .var { color: #ffcb6b; }
-        .example-body .code-box pre .builtin { color: #89ddff; }
-
-        .example .concept-list {
-            margin-top: 1rem;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.4rem;
-        }
-        .example .concept-list .concept {
-            background: rgba(46, 204, 113, 0.15);
-            color: var(--accent);
-            padding: 0.2rem 0.7rem;
+        .notebook-step pre {
+            background: #2c1810;
+            color: #f5e6c8;
+            padding: 1rem 1.2rem;
             border-radius: 10px;
-            font-size: 0.75rem;
-            font-weight: 500;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', 'Courier New', monospace;
+            font-size: 0.85rem;
+            line-height: 1.7;
+            overflow-x: auto;
+            tab-size: 4;
+            white-space: pre;
+        }
+        .notebook-step pre .cm { color: #8a7a6a; font-style: italic; }
+        .notebook-step pre .kw { color: #e74c3c; font-weight: 600; }
+        .notebook-step pre .fn { color: #3498db; }
+        .notebook-step pre .num { color: #f39c12; }
+        .notebook-step pre .str { color: #2ecc71; }
+        .notebook-step pre .var { color: #9b59b6; }
+        .notebook-step pre .bool { color: #e74c3c; }
+
+        /* COMPUTER STEP */
+        .computer-step {
+            background: rgba(46, 204, 113, 0.08);
+            border-left: 4px solid var(--accent);
+            padding: 1rem 1.5rem;
+            border-radius: 0 12px 12px 0;
+            margin: 1rem 0;
+        }
+        .computer-step .step-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.4rem;
+        }
+        .computer-step .step-label h4 {
+            color: var(--accent);
+            font-size: 1rem;
+        }
+        .computer-step p {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            line-height: 1.6;
         }
 
-        /* PLAYGROUND */
-        .playground {
+        /* CHALLENGE */
+        .challenge {
+            background: rgba(243, 156, 18, 0.08);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            margin: 0.8rem 0;
+            border: 1px solid rgba(243, 156, 18, 0.2);
+        }
+        .challenge h5 {
+            color: var(--secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+        .challenge p {
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        /* FINAL PROJECT */
+        .final-project {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.1), rgba(52, 152, 219, 0.05));
+            border-radius: 20px;
+            padding: 2rem;
+            border: 2px solid var(--accent);
+            margin: 2rem 0;
+        }
+        .final-project h2 {
+            color: var(--accent);
+            font-size: 1.4rem;
+            margin-bottom: 0.8rem;
+        }
+        .final-project .req-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 0.8rem;
+            margin: 1rem 0;
+        }
+        .final-project .req-item {
+            background: rgba(46, 204, 113, 0.08);
+            padding: 0.8rem 1rem;
+            border-radius: 10px;
+            border: 1px solid rgba(46, 204, 113, 0.15);
+        }
+        .final-project .req-item h4 {
+            color: var(--accent);
+            font-size: 0.85rem;
+            margin-bottom: 0.2rem;
+        }
+        .final-project .req-item p {
+            color: var(--text-dim);
+            font-size: 0.8rem;
+        }
+        .final-project .ideas-box {
+            background: rgba(243, 156, 18, 0.08);
+            border-left: 4px solid var(--secondary);
+            padding: 1rem 1.2rem;
+            border-radius: 0 12px 12px 0;
+            margin-top: 1rem;
+        }
+        .final-project .ideas-box p {
+            color: var(--text-dim);
+            font-size: 0.85rem;
+        }
+
+        /* PLAYGROUND EXTRA */
+        .playground-extra {
             background: var(--card);
             border-radius: 20px;
-            padding: 1.8rem;
+            padding: 1.8rem 2rem;
             border: 2px solid var(--secondary);
-            margin-bottom: 2rem;
+            margin: 2rem 0;
         }
-        .playground h2 {
+        .playground-extra h2 {
             color: var(--secondary);
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+        .playground-extra > p {
+            color: var(--text-dim);
+            font-size: 0.9rem;
             margin-bottom: 1rem;
         }
-        .playground .editor-area {
+        .playground-extra .play-area {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 1.5rem;
         }
-        .playground textarea {
+        .playground-extra textarea {
             width: 100%;
-            height: 350px;
+            height: 300px;
             background: var(--code-bg);
             border: 2px solid var(--border);
             border-radius: 12px;
             padding: 1rem;
             color: #d4d4e8;
             font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             line-height: 1.6;
             resize: vertical;
             outline: none;
-            transition: border-color 0.3s;
             tab-size: 4;
         }
-        .playground textarea:focus {
+        .playground-extra textarea:focus {
             border-color: var(--secondary);
         }
-        .playground .playground-canvas {
+        .playground-extra .p-canvas {
             background: #111;
             border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             aspect-ratio: 1 / 1;
             border: 2px solid var(--border);
             overflow: hidden;
-            min-height: 350px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 280px;
             position: relative;
         }
-        .playground .playground-canvas .placeholder {
+        .playground-extra .p-canvas .placeholder {
             color: var(--text-dim);
-            font-size: 0.9rem;
             text-align: center;
             padding: 1rem;
+            font-size: 0.9rem;
         }
-        .playground .playground-canvas .placeholder strong {
-            color: var(--secondary);
-        }
-        .playground .controls {
+        .playground-extra .p-controls {
             display: flex;
             gap: 0.8rem;
             margin-top: 1rem;
             flex-wrap: wrap;
             align-items: center;
         }
-        .playground .controls button {
+        .playground-extra .p-controls button {
             background: var(--secondary);
             color: #0d0d1a;
             border: none;
-            padding: 0.7rem 2rem;
-            border-radius: 12px;
+            padding: 0.6rem 1.8rem;
+            border-radius: 10px;
             font-weight: 700;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s;
         }
-        .playground .controls button:hover {
+        .playground-extra .p-controls button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(243, 156, 18, 0.3);
         }
-        .playground .controls button.reset-btn {
-            background: rgba(255,255,255,0.1);
+        .playground-extra .p-controls button.sec {
+            background: rgba(255,255,255,0.08);
             color: var(--text);
             border: 1px solid var(--border);
         }
-        .playground .controls button.reset-btn:hover {
-            background: rgba(255,255,255,0.15);
-            box-shadow: none;
-        }
-        .playground .controls .error-msg {
-            color: var(--error);
-            font-size: 0.85rem;
-            background: rgba(231, 76, 60, 0.1);
-            padding: 0.5rem 1rem;
+        .playground-extra .p-controls .err {
+            color: var(--primary);
+            font-size: 0.8rem;
+            background: rgba(231,76,60,0.1);
+            padding: 0.4rem 0.8rem;
             border-radius: 8px;
-            flex: 1;
             display: none;
         }
-        .playground .controls .error-msg.show {
-            display: block;
-        }
-
-        /* EXERCISE */
-        .exercise {
-            background: linear-gradient(135deg, rgba(46, 204, 113, 0.1), rgba(46, 204, 113, 0.05));
-            border-radius: 20px;
-            padding: 2rem;
-            border: 2px solid var(--accent);
-            margin-bottom: 2rem;
-        }
-        .exercise h2 {
-            color: var(--accent);
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
-        }
-        .exercise .req-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin: 1.2rem 0;
-        }
-        .exercise .req-item {
-            background: rgba(46, 204, 113, 0.08);
-            padding: 1rem;
-            border-radius: 12px;
-            border: 1px solid rgba(46, 204, 113, 0.2);
-        }
-        .exercise .req-item h4 {
-            color: var(--accent);
-            font-size: 0.9rem;
-            margin-bottom: 0.3rem;
-        }
-        .exercise .req-item p {
-            color: var(--text-dim);
-            font-size: 0.85rem;
-        }
-        .exercise .tip-box {
-            background: rgba(243, 156, 18, 0.1);
-            border-left: 4px solid var(--secondary);
-            padding: 1rem 1.2rem;
-            border-radius: 0 12px 12px 0;
-            margin-top: 1rem;
-        }
-        .exercise .tip-box p {
-            color: var(--text-dim);
-            font-size: 0.9rem;
-        }
+        .playground-extra .p-controls .err.show { display: block; }
 
         /* FOOTER */
         footer {
@@ -410,222 +457,425 @@
             color: #555;
             font-size: 0.85rem;
             border-top: 1px solid var(--border);
-            margin-top: 2rem;
         }
 
         /* RESPONSIVE */
-        @media (max-width: 800px) {
-            header h1 { font-size: 1.8rem; }
-            header .subtitle { font-size: 1rem; }
-            .objectives { grid-template-columns: 1fr; }
-            .example-body { grid-template-columns: 1fr; }
-            .playground .editor-area { grid-template-columns: 1fr; }
-            .playground textarea { height: 200px; }
-            .playground .playground-canvas { min-height: 250px; }
+        @media (max-width: 750px) {
+            header h1 { font-size: 1.6rem; }
+            .ex-demo-row { grid-template-columns: 1fr; }
+            .playground-extra .play-area { grid-template-columns: 1fr; }
+            .objectives .grid-ob { grid-template-columns: 1fr; }
+            .method-bar .arrow { display: none; }
+        }
+        @media print {
+            .ex-demo-row .demo-canvas { display: none; }
+            .playground-extra { display: none; }
+            .method-bar { display: none; }
+            header { clip-path: none; padding: 1.5rem; }
+            body { background: white; color: black; }
+            .exercise-card { background: white; border: 1px solid #ccc; }
+            .notebook-step { background: #fff8e8; border: 1px dashed #aaa; }
+            .notebook-step pre { background: #1a1a2e; color: #e8e8f0; font-size: 0.75rem; }
+            .objectives { background: white; border: 1px solid #ccc; }
+            .final-project { background: white; border: 2px solid #2ecc71; }
+            .computer-step { border-left-color: #2ecc71; }
+            main { margin-top: 1rem; }
         }
 
-        /* SCROLLBAR */
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: var(--bg); }
-        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #3a3a5a; }
-
-        /* ANIMATION */
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .example, .playground, .exercise, .objectives {
-            animation: fadeUp 0.5s ease forwards;
-        }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
     </style>
 </head>
 <body>
+
+    <!-- ===== HEADER ===== -->
     <header>
-        <h1>Processing: Interactividad y Animación</h1>
-        <p class="subtitle">Dale vida a tus figuras con el mouse, el teclado y el movimiento</p>
-        <span class="badge-day">DÍA 2 &bull; Taller Gradécimo</span>
+        <h1>Processing: Eventos, Aleatoriedad y Animación</h1>
+        <p class="subtitle">Aprende a hacer programas que reaccionan al mouse, al teclado y al tiempo</p>
+        <span class="badge-day">DÍA 2 &bull; Taller Gradécimo Processing</span>
     </header>
 
+    <!-- ===== MAIN ===== -->
     <main>
+
         <!-- OBJETIVOS -->
         <div class="objectives">
-            <h2> Objetivos del día</h2>
-            <ul>
-                <li>Usar <strong>mouseX</strong> y <strong>mouseY</strong> para interactuar</li>
-                <li>Detectar clics con <strong>mousePressed()</strong></li>
-                <li>Crear <strong>variables</strong> que cambien en el tiempo</li>
-                <li>Animar figuras que se mueven solas</li>
-                <li>Usar <strong>random()</strong> para generar sorpresa</li>
-            </ul>
-            <ul>
-                <li>Combinar <strong>if</strong> + interacción para tomar decisiones</li>
-                <li>Usar <strong>keyPressed()</strong> para responder al teclado</li>
-                <li>¡Crear tu propia <strong>obra de arte interactiva</strong>!</li>
-            </ul>
+            <h2> Quésabemos y qué vamos a aprender hoy</h2>
+            <div class="grid-ob">
+                <ul>
+                    <li class="old"> Ya sabemos: setup(), draw(), figuras, colores, if, mouseX, mouseY, int y float</li>
+                    <li class="new"> <strong>mousePressed()</strong> — hacer que pase algo al hacer clic</li>
+                    <li class="new"> <strong>random()</strong> — números al azar para crear variedad</li>
+                </ul>
+                <ul>
+                    <li class="new"> <strong>Animación</strong> — variables que cambian en draw() para dar movimiento</li>
+                    <li class="new"> <strong>keyPressed()</strong> — controlar el programa con el teclado</li>
+                    <li class="new"> <strong>Proyecto final</strong> — tu propia obra interactiva combinándolo todo</li>
+                </ul>
+            </div>
         </div>
 
-        <!-- REPASO RÁPIDO -->
+        <!-- METODOLOGÍA -->
+        <div class="method-bar">
+            <span class="step"><span class="step-num">1</span> Copia en tu cuaderno</span>
+            <span class="arrow">→</span>
+            <span class="step"><span class="step-num">2</span> Escríbelo en Processing</span>
+            <span class="arrow">→</span>
+            <span class="step"><span class="step-num">3</span> Ejecútalo y mira qué pasa</span>
+            <span class="arrow">→</span>
+            <span class="step"><span class="step-num">4</span> Modifícalo y experimenta</span>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- EJERCICIO 1: mousePressed -->
+        <!-- ============================================================ -->
         <div class="section-title">
             <span class="num">1</span>
-            Repaso rápido: lo que ya sabemos
+            mousePressed() — Reaccionar al clic
         </div>
-        <div class="example" id="repaso">
-            <div class="example-header">
-                <h3>Estructura básica de Processing</h3>
-                <div>
-                    <span class="tag">setup</span>
-                    <span class="tag">draw</span>
-                    <span class="tag">figuras</span>
-                    <span class="tag">colores</span>
+
+        <div class="exercise-card">
+            <div class="ex-header">
+                <h3>Ejercicio 1: "Dibuja con clics"</h3>
+                <div class="tags">
+                    <span>mousePressed</span>
+                    <span>eventos</span>
                 </div>
             </div>
-            <div class="example-body">
-                <div class="canvas-container" id="sketch-repaso"></div>
-                <div class="code-box">
-                    <div class="code-header">
-                        <span>Processing (Java) — p5.js (JavaScript)</span>
-                        <button onclick="copyCode('code-repaso')">Copiar</button>
-                    </div>
-                    <pre id="code-repaso"><span class="kw">void</span> <span class="fn">setup</span>() {
+            <p class="ex-desc">
+                <strong>¿Qué vamos a aprender?</strong> Processing tiene funciones especiales que se ejecutan 
+                <em>automáticamente</em> cuando ocurre algo. <code>mousePressed()</code> se ejecuta cada vez 
+                que haces clic con el mouse. ¡Es como un <code>draw()</code> que solo corre cuando cliqueas!
+            </p>
+
+            <div class="ex-demo-row">
+                <div class="demo-canvas" id="demo-ex1"></div>
+                <div>
+                    <!-- PASO 1: CUADERNO -->
+                    <div class="notebook-step">
+                        <div class="step-label">
+                            <span class="icon"></span>
+                            <h4>Paso 1: Copia esto en tu cuaderno</h4>
+                        </div>
+                        <pre><span class="cm">// mousePressed: dibuja un círculo donde cliqueas</span>
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
   <span class="fn">size</span>(400, 400);
+  <span class="fn">background</span>(30, 30, 60);
+}
+
+<span class="kw">void</span> <span class="fn">draw</span>() {
+  <span class="cm">// Vacío: no necesitamos dibujar continuamente</span>
+}
+
+<span class="kw">void</span> <span class="fn">mousePressed</span>() {
+  <span class="fn">fill</span>(231, 76, 60);
+  <span class="fn">ellipse</span>(mouseX, mouseY, 50, 50);
+}</pre>
+                    </div>
+
+                    <!-- PASO 2: COMPUTADOR -->
+                    <div class="computer-step">
+                        <div class="step-label">
+                            <span class="icon"> </span>
+                            <h4>Paso 2: Escríbelo en Processing y ejecútalo</h4>
+                        </div>
+                        <p>Abre Processing, escribe el código, haz clic en <strong>Play (▶)</strong> y 
+                        después haz clic en cualquier parte del canvas. Cada clic dibuja un círculo rojo.</p>
+                    </div>
+
+                    <!-- RETO -->
+                    <div class="challenge">
+                        <h5> Modifica y experimenta</h5>
+                        <p>Cambia el color del fill(), prueba con diferentes valores RGB. 
+                        ¿Qué pasa si cambias el tamaño del ellipse() a 80? ¿Y si pones 
+                        <code>background(30, 30, 60);</code> dentro de <code>mousePressed()</code> en lugar de 
+                        <code>setup()</code>?</p>
+                    </div>
+
+                    <!-- PREGUNTA -->
+                    <div class="challenge" style="border-color: var(--accent);">
+                        <h5> Para pensar</h5>
+                        <p>¿Por qué el canvas no se borra cada vez que haces clic? ¿Qué pasaría si 
+                        movemos <code>background()</code> a <code>draw()</code>?</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- EJERCICIO 2: random -->
+        <!-- ============================================================ -->
+        <div class="section-title">
+            <span class="num">2</span>
+            random() — Sorpresa y variedad
+        </div>
+
+        <div class="exercise-card">
+            <div class="ex-header">
+                <h3>Ejercicio 2: "Explosión de colores"</h3>
+                <div class="tags">
+                    <span>random</span>
+                    <span>mousePressed</span>
+                </div>
+            </div>
+            <p class="ex-desc">
+                <strong>¿Qué vamos a aprender?</strong> <code>random()</code> genera un número 
+                al azar entre 0 y el valor que le pases. Si escribes <code>random(255)</code>, 
+                te da cualquier número entre 0 y 255. ¡Cada clic será una sorpresa!
+            </p>
+
+            <div class="ex-demo-row">
+                <div class="demo-canvas" id="demo-ex2"></div>
+                <div>
+                    <div class="notebook-step">
+                        <div class="step-label">
+                            <span class="icon"></span>
+                            <h4>Paso 1: Copia esto en tu cuaderno</h4>
+                        </div>
+                        <pre><span class="cm">// random: colores y tamaños aleatorios</span>
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">size</span>(400, 400);
+  <span class="fn">background</span>(30, 30, 60);
+}
+
+<span class="kw">void</span> <span class="fn">draw</span>() {
+}
+
+<span class="kw">void</span> <span class="fn">mousePressed</span>() {
+  <span class="cm">// fill con 3 valores aleatorios (R, G, B)</span>
+  <span class="fn">fill</span>(<span class="fn">random</span>(255), <span class="fn">random</span>(255), <span class="fn">random</span>(255));
+  <span class="cm">// ellipse con tamaño aleatorio entre 20 y 80</span>
+  <span class="fn">ellipse</span>(mouseX, mouseY, <span class="fn">random</span>(20, 80), <span class="fn">random</span>(20, 80));
+}</pre>
+                    </div>
+
+                    <div class="computer-step">
+                        <div class="step-label">
+                            <span class="icon"> </span>
+                            <h4>Paso 2: Escríbelo en Processing y ejecútalo</h4>
+                        </div>
+                        <p>Copia el código, ejecútalo y haz clic varias veces. Cada clic da un color 
+                        y tamaño diferente. ¡Nunca dos clics son iguales!</p>
+                    </div>
+
+                    <div class="challenge">
+                        <h5> Modifica y experimenta</h5>
+                        <p>1. Cambia <code>random(20, 80)</code> por <code>random(10, 150)</code>.<br>
+                        2. Agrega <code>random(100, 255)</code> como cuarto valor del fill() para 
+                        cambiar la transparencia (alpha).<br>
+                        3. Haz que <code>background()</code> también use random cada cierto tiempo.</p>
+                    </div>
+
+                    <div class="challenge" style="border-color: var(--accent);">
+                        <h5> Para pensar</h5>
+                        <p>¿Qué diferencia hay entre <code>random(255)</code> y <code>random(20, 80)</code>? 
+                        ¿Cómo harías para que el color siempre tenga rojo alto (cerca de 255)?</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- EJERCICIO 3: Animación -->
+        <!-- ============================================================ -->
+        <div class="section-title">
+            <span class="num">3</span>
+            Animación — Movimiento con variables
+        </div>
+
+        <div class="exercise-card">
+            <div class="ex-header">
+                <h3>Ejercicio 3: "La pelota viajera"</h3>
+                <div class="tags">
+                    <span>variables</span>
+                    <span>animación</span>
+                    <span>draw</span>
+                </div>
+            </div>
+            <p class="ex-desc">
+                <strong>¿Qué vamos a aprender?</strong> <code>draw()</code> se ejecuta 60 veces por segundo. 
+                Si tenemos una variable <code>x</code> que empieza en 0 y en cada <code>draw()</code> 
+                hacemos <code>x = x + 2</code>, la figura se irá moviendo sola. ¡Esto es animación!
+            </p>
+
+            <div class="ex-demo-row">
+                <div class="demo-canvas" id="demo-ex3"></div>
+                <div>
+                    <div class="notebook-step">
+                        <div class="step-label">
+                            <span class="icon"></span>
+                            <h4>Paso 1: Copia esto en tu cuaderno</h4>
+                        </div>
+                        <pre><span class="cm">// Animación: una pelota que se mueve sola</span>
+<span class="kw">float</span> x = 0;
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">size</span>(400, 200);
 }
 
 <span class="kw">void</span> <span class="fn">draw</span>() {
   <span class="fn">background</span>(30, 30, 60);
   
-  <span class="cm">// Figuras con colores</span>
-  <span class="fn">fill</span>(231, 76, 60);
-  <span class="fn">ellipse</span>(100, 200, 80, 80);
-  
+  <span class="cm">// Dibuja la pelota en la posición x</span>
   <span class="fn">fill</span>(46, 204, 113);
-  <span class="fn">rect</span>(250, 160, 100, 80);
+  <span class="fn">ellipse</span>(x, 100, 40, 40);
   
-  <span class="cm">// if: cambia color si el mouse está a la izquierda</span>
-  <span class="kw">if</span> (mouseX &lt; width/2) {
-    <span class="fn">fill</span>(243, 156, 18);
-  } <span class="kw">else</span> {
-    <span class="fn">fill</span>(155, 89, 182);
+  <span class="cm">// Mueve la pelota: x aumenta cada frame</span>
+  x = x + 2;
+  
+  <span class="cm">// Si la pelota sale por la derecha, vuelve a empezar</span>
+  <span class="kw">if</span> (x &gt; width + 20) {
+    x = -20;
   }
-  <span class="fn">ellipse</span>(mouseX, mouseY, 40, 40);
 }</pre>
+                    </div>
+
+                    <div class="computer-step">
+                        <div class="step-label">
+                            <span class="icon"> </span>
+                            <h4>Paso 2: Escríbelo en Processing y ejecútalo</h4>
+                        </div>
+                        <p>La pelota verde cruza la pantalla de izquierda a derecha una y otra vez. 
+                        Prueba cambiando <code>x = x + 2</code> por <code>x = x + 5</code> o <code>x = x + 0.5</code>.</p>
+                    </div>
+
+                    <div class="challenge">
+                        <h5> Modifica y experimenta</h5>
+                        <p>1. Agrega una variable <code>float y = 100;</code> y haz que la pelota también 
+                        se mueva verticalmente con <code>y = y + 1.5</code>.<br>
+                        2. Combínalo con <code>mousePressed()</code> para que al hacer clic la pelota 
+                        cambie de color con <code>fill(random(255), random(255), random(255))</code>.<br>
+                        3. ¿Puedes hacer que la velocidad también sea una variable?</p>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- EJEMPLO 2: mouseX / mouseY -->
+        <!-- ============================================================ -->
+        <!-- EJERCICIO 4: Rebote + keyPressed -->
+        <!-- ============================================================ -->
         <div class="section-title">
-            <span class="num">2</span>
-            Conceptos nuevos — Explora cada ejemplo
+            <span class="num">4</span>
+            keyPressed() — Control con teclado
         </div>
 
-        <div class="example" id="ex1">
-            <div class="example-header">
-                <h3>Ejemplo 1: El círculo curioso</h3>
-                <div>
-                    <span class="tag">mouseX</span>
-                    <span class="tag">mouseY</span>
-                    <span class="tag">interacción</span>
+        <div class="exercise-card">
+            <div class="ex-header">
+                <h3>Ejercicio 4: "Controla con las teclas"</h3>
+                <div class="tags">
+                    <span>keyPressed</span>
+                    <span>if</span>
+                    <span>variables</span>
                 </div>
             </div>
-            <div class="example-body">
-                <div class="canvas-container" id="sketch-ex1"></div>
-                <div class="code-box">
-                    <div class="code-header">
-                        <span>Un círculo que te sigue</span>
-                        <button onclick="copyCode('code-ex1')">Copiar</button>
-                    </div>
-                    <pre id="code-ex1"><span class="kw">void</span> <span class="fn">setup</span>() {
-  <span class="fn">size</span>(400, 400);
-}
+            <p class="ex-desc">
+                <strong>¿Qué vamos a aprender?</strong> Así como <code>mousePressed()</code> detecta 
+                clics, <code>keyPressed()</code> detecta cuando presionas una tecla. Podemos usar 
+                la variable <code>key</code> para saber qué tecla se presionó y hacer cosas diferentes 
+                con <code>if</code>.
+            </p>
 
-<span class="kw">void</span> <span class="fn">draw</span>() {
-  <span class="fn">background</span>(20, 20, 40);
-  
-  <span class="cm">// mouseX y mouseY siguen la posición del mouse</span>
-  <span class="fn">fill</span>(231, 76, 60);
-  <span class="fn">ellipse</span>(mouseX, mouseY, 60, 60);
-  
-  <span class="cm">// Círculo más pequeño que persigue al grande</span>
-  <span class="fn">fill</span>(243, 156, 18, 150);
-  <span class="fn">ellipse</span>(mouseX - 30, mouseY - 30, 30, 30);
-}</pre>
-                </div>
-            </div>
-            <div class="concept-list">
-                <span class="concept"> mouseX = posición X del mouse</span>
-                <span class="concept"> mouseY = posición Y del mouse</span>
-                <span class="concept"> Se actualiza automáticamente en draw()</span>
-            </div>
-        </div>
-
-        <div class="example" id="ex2">
-            <div class="example-header">
-                <h3>Ejemplo 2: Pinta con clics</h3>
+            <div class="ex-demo-row">
+                <div class="demo-canvas" id="demo-ex4"></div>
                 <div>
-                    <span class="tag">mousePressed</span>
-                    <span class="tag">random</span>
-                    <span class="tag">if</span>
-                </div>
-            </div>
-            <div class="example-body">
-                <div class="canvas-container" id="sketch-ex2"></div>
-                <div class="code-box">
-                    <div class="code-header">
-                        <span>Haz clic para pintar círculos de colores</span>
-                        <button onclick="copyCode('code-ex2')">Copiar</button>
-                    </div>
-                    <pre id="code-ex2"><span class="cm">// Variables para guardar datos</span>
-<span class="kw">int</span> x = 0, y = 0;
-<span class="kw">boolean</span> pintar = <span class="kw">false</span>;
+                    <div class="notebook-step">
+                        <div class="step-label">
+                            <span class="icon"></span>
+                            <h4>Paso 1: Copia esto en tu cuaderno</h4>
+                        </div>
+                        <pre><span class="cm">// keyPressed: controla la pelota con teclas</span>
+<span class="kw">float</span> x = 200;
+<span class="kw">float</span> y = 200;
 
 <span class="kw">void</span> <span class="fn">setup</span>() {
   <span class="fn">size</span>(400, 400);
-  <span class="fn">background</span>(20, 20, 40);
 }
 
 <span class="kw">void</span> <span class="fn">draw</span>() {
-  <span class="kw">if</span> (pintar) {
-    <span class="cm">// random() da un valor aleatorio</span>
-    <span class="fn">fill</span>(<span class="fn">random</span>(255), <span class="fn">random</span>(255), <span class="fn">random</span>(255), 150);
-    <span class="fn">ellipse</span>(x, y, <span class="fn">random</span>(20, 60), <span class="fn">random</span>(20, 60));
-    pintar = <span class="kw">false</span>;
-  }
+  <span class="fn">background</span>(30, 30, 60);
+  <span class="fn">fill</span>(231, 76, 60);
+  <span class="fn">ellipse</span>(x, y, 50, 50);
 }
 
-<span class="kw">void</span> <span class="fn">mousePressed</span>() {
-  <span class="cm">// Se ejecuta UNA VEZ cada vez que haces clic</span>
-  x = mouseX;
-  y = mouseY;
-  pintar = <span class="kw">true</span>;
+<span class="kw">void</span> <span class="fn">keyPressed</span>() {
+  <span class="cm">// La variable 'key' guarda la tecla presionada</span>
+  <span class="kw">if</span> (key == <span class="str">'a'</span>) {
+    x = x - 10;
+  }
+  <span class="kw">if</span> (key == <span class="str">'d'</span>) {
+    x = x + 10;
+  }
+  <span class="kw">if</span> (key == <span class="str">'w'</span>) {
+    y = y - 10;
+  }
+  <span class="kw">if</span> (key == <span class="str">'s'</span>) {
+    y = y + 10;
+  }
 }</pre>
+                    </div>
+
+                    <div class="computer-step">
+                        <div class="step-label">
+                            <span class="icon"> </span>
+                            <h4>Paso 2: Escríbelo en Processing y ejecútalo</h4>
+                        </div>
+                        <p>Presiona las teclas <strong>A, D, W, S</strong> para mover el círculo rojo. 
+                        Observa cómo <code>key</code> guarda el carácter de la tecla que presionaste.</p>
+                    </div>
+
+                    <div class="challenge">
+                        <h5> Modifica y experimenta</h5>
+                        <p>1. Agrega más teclas: por ejemplo, la <strong>barra espaciadora</strong> 
+                        (se representa como <code>' '</code>) para que la pelota vuelva al centro.<br>
+                        2. Combínalo con <code>keyPressed()</code> y <code>random()</code> para que 
+                        al presionar <strong>'c'</strong> la pelota cambie a un color aleatorio.<br>
+                        3. ¿Qué pasa si cambias <code>key == 'a'</code> por <code>key == 'a' || key == 'A'</code>?</p>
+                    </div>
+
+                    <div class="challenge" style="border-color: var(--accent);">
+                        <h5> Para pensar</h5>
+                        <p>¿Cómo harías para que la pelota no se salga del canvas? 
+                        Pista: necesitas <code>if</code> para limitar <code>x</code> e <code>y</code> 
+                        entre 0 y <code>width</code>/<code>height</code>.</p>
+                    </div>
                 </div>
-            </div>
-            <div class="concept-list">
-                <span class="concept"> mousePressed() se ejecuta al hacer clic</span>
-                <span class="concept"> random(255) = número aleatorio entre 0 y 255</span>
-                <span class="concept"> Las variables guardan información</span>
             </div>
         </div>
 
-        <div class="example" id="ex3">
-            <div class="example-header">
-                <h3>Ejemplo 3: Pelota que rebota</h3>
-                <div>
-                    <span class="tag">variables</span>
-                    <span class="tag">animación</span>
-                    <span class="tag">if</span>
-                    <span class="tag">velocidad</span>
+        <!-- ============================================================ -->
+        <!-- EJERCICIO 5: Rebote (opcional si alcanza el tiempo) -->
+        <!-- ============================================================ -->
+        <div class="section-title">
+            <span class="num">5</span>
+            Extra: La pelota que rebota (si te alcanza el tiempo)
+        </div>
+
+        <div class="exercise-card" style="border-left-color: var(--secondary);">
+            <div class="ex-header">
+                <h3>Ejercicio 5: Rebote en los bordes</h3>
+                <div class="tags">
+                    <span>if</span>
+                    <span>velocidad</span>
+                    <span>desafío</span>
                 </div>
             </div>
-            <div class="example-body">
-                <div class="canvas-container" id="sketch-ex3"></div>
-                <div class="code-box">
-                    <div class="code-header">
-                        <span>La pelota se mueve sola y rebota en los bordes</span>
-                        <button onclick="copyCode('code-ex3')">Copiar</button>
-                    </div>
-                    <pre id="code-ex3"><span class="cm">// Variables que cambian en el tiempo</span>
+            <p class="ex-desc">
+                Combinando animación e <code>if</code>, podemos hacer que la pelota rebote 
+                como en un videojuego. Cuando la pelota llega al borde, invertimos su velocidad.
+            </p>
+
+            <div class="ex-demo-row">
+                <div class="demo-canvas" id="demo-ex5"></div>
+                <div>
+                    <div class="notebook-step">
+                        <div class="step-label">
+                            <span class="icon"></span>
+                            <h4>Copia en tu cuaderno (si te alcanza el tiempo)</h4>
+                        </div>
+                        <pre><span class="cm">// Pelota que rebota en los 4 bordes</span>
 <span class="kw">float</span> x = 200;
 <span class="kw">float</span> y = 200;
 <span class="kw">float</span> velX = 3;
@@ -636,7 +886,7 @@
 }
 
 <span class="kw">void</span> <span class="fn">draw</span>() {
-  <span class="fn">background</span>(20, 20, 40);
+  <span class="fn">background</span>(30, 30, 60);
   
   <span class="cm">// Dibuja la pelota</span>
   <span class="fn">fill</span>(46, 204, 113);
@@ -646,544 +896,357 @@
   x = x + velX;
   y = y + velY;
   
-  <span class="cm">// Rebota en los bordes con if</span>
+  <span class="cm">// Rebota en los bordes</span>
   <span class="kw">if</span> (x &gt; width - 20 || x &lt; 20) {
-    velX = -velX;  <span class="cm">// Invierte dirección</span>
+    velX = -velX;  <span class="cm">// Invierte dirección horizontal</span>
   }
   <span class="kw">if</span> (y &gt; height - 20 || y &lt; 20) {
-    velY = -velY;
+    velY = -velY;  <span class="cm">// Invierte dirección vertical</span>
   }
 }</pre>
-                </div>
-            </div>
-            <div class="concept-list">
-                <span class="concept"> float = número con decimales</span>
-                <span class="concept"> x = x + velX mueve la figura</span>
-                <span class="concept"> if + rebote = simulación física</span>
-            </div>
-        </div>
-
-        <div class="example" id="ex4">
-            <div class="example-header">
-                <h3>Ejemplo 4: Arte generativo interactivo</h3>
-                <div>
-                    <span class="tag">todo combinado</span>
-                    <span class="tag">keyPressed</span>
-                    <span class="tag">random</span>
-                    <span class="tag">mousePressed</span>
-                </div>
-            </div>
-            <div class="example-body">
-                <div class="canvas-container" id="sketch-ex4"></div>
-                <div class="code-box">
-                    <div class="code-header">
-                        <span>Presiona cualquier tecla para reiniciar</span>
-                        <button onclick="copyCode('code-ex4')">Copiar</button>
                     </div>
-                    <pre id="code-ex4"><span class="cm">// Arte generativo: figuras que bailan</span>
-<span class="kw">float</span> t = 0;
 
-<span class="kw">void</span> <span class="fn">setup</span>() {
-  <span class="fn">size</span>(400, 400);
-  <span class="fn">colorMode</span>(HSB, 360, 100, 100);
-}
+                    <div class="challenge" style="border-color: var(--accent);">
+                        <h5> Para pensar</h5>
+                        <p>¿Qué hace <code>velX = -velX</code>? ¿Porqué usamos <code>width - 20</code> 
+                        y no simplemente <code>width</code>? (Pista: el radio de la pelota es 20)</p>
+                    </div>
 
-<span class="kw">void</span> <span class="fn">draw</span>() {
-  <span class="fn">background</span>(0, 0, 10);
-  
-  <span class="cm">// Figuras que se mueven con seno (ondas)</span>
-  <span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; 10; i++) {
-    <span class="kw">float</span> angulo = t + i * 0.5;
-    <span class="kw">float</span> x = 200 + <span class="fn">sin</span>(angulo) * 150;
-    <span class="kw">float</span> y = 200 + <span class="fn">cos</span>(angulo) * 150;
-    
-    <span class="fn">fill</span>(i * 36, 80, 90, 70);
-    <span class="fn">ellipse</span>(x, y, 30 + mouseX / 20, 30 + mouseY / 20);
-  }
-  
-  t = t + 0.02;
-  
-  <span class="cm">// Texto interactivo</span>
-  <span class="fn">fill</span>(255);
-  <span class="fn">text</span>(<span class="str">"Mouse: tamaño | Clic: nuevo color | Tecla: reinicia"</span>, 40, 380);
-}
-
-<span class="kw">void</span> <span class="fn">mousePressed</span>() {
-  <span class="cm">// Reinicia con colores diferentes</span>
-  <span class="fn">colorMode</span>(<span class="fn">random</span>(3) &lt; 1 ? RGB : HSB, 
-             <span class="fn">random</span>(255), <span class="fn">random</span>(255), <span class="fn">random</span>(255));
-}
-
-<span class="kw">void</span> <span class="fn">keyPressed</span>() {
-  <span class="cm">// keyPressed() detecta cualquier tecla</span>
-  <span class="fn">setup</span>();  <span class="cm">// Reinicia todo</span>
-}</pre>
+                    <div class="challenge">
+                        <h5> Modifica</h5>
+                        <p>Agrega <code>mousePressed()</code> para que al hacer clic la pelota 
+                        se teletransporte a la posición del mouse. Agrega <code>keyPressed()</code> 
+                        para que al presionar <strong>'r'</strong> reinicie la posición.</p>
+                    </div>
                 </div>
-            </div>
-            <div class="concept-list">
-                <span class="concept"> for + sin/cos = movimiento circular</span>
-                <span class="concept"> keyPressed() responde al teclado</span>
-                <span class="concept"> mouseX/mouseY controlan tamaño</span>
             </div>
         </div>
 
-        <!-- PLAYGROUND -->
+        <!-- ============================================================ -->
+        <!-- PROYECTO FINAL -->
+        <!-- ============================================================ -->
         <div class="section-title">
-            <span class="num">3</span>
-            Tu turno — Experimenta aquí
+            <span class="num">6</span>
+            Tu proyecto personal
         </div>
 
-        <div class="playground">
-            <h2> Laboratorio de código</h2>
-            <p style="color: var(--text-dim); margin-bottom: 1rem;">
-                Escribe tu código de Processing (p5.js) abajo y haz clic en <strong>"Ejecutar"</strong> para verlo en acción.
-                <br>Usa <strong>p.</strong> antes de cada función (ej: <code>p.createCanvas()</code>, <code>p.ellipse()</code>, <code>p.mouseX</code>).
+        <div class="final-project">
+            <h2> Crea tu propia obra de arte interactiva</h2>
+            <p style="color: var(--text-dim); margin-bottom: 0.3rem;">
+                Usando <strong>todo lo que aprendiste</strong> (hoy y la clase anterior), crea un programa original.
+                El tema es libre, pero debe incluir:
             </p>
-            <div class="editor-area">
-                <div style="position:relative;">
-                    <div style="background:var(--code-bg); padding:0.5rem 1rem; border-radius:12px 12px 0 0; font-size:0.8rem; color:var(--text-dim); border-bottom:1px solid var(--border);">
-                        Código (p5.js)
-                    </div>
+            <div class="req-grid">
+                <div class="req-item">
+                    <h4> 2+ figuras</h4>
+                    <p>Usa al menos dos figuras diferentes (ellipse, rect, line, triangle...)</p>
+                </div>
+                <div class="req-item">
+                    <h4>  Colores</h4>
+                    <p>fill(), stroke(), background() — usa colores que te gusten</p>
+                </div>
+                <div class="req-item">
+                    <h4> mouseX / mouseY</h4>
+                    <p>Al menos una figura reacciona a la posición del mouse</p>
+                </div>
+                <div class="req-item">
+                    <h4>  Un if</h4>
+                    <p>Una condición que cambie algo (color, posición, tamaño...)</p>
+                </div>
+                <div class="req-item">
+                    <h4> mousePressed()</h4>
+                    <p>Algo debe pasar cuando haces clic</p>
+                </div>
+                <div class="req-item">
+                    <h4> random()</h4>
+                    <p>Usa random en al menos una parte (color, posición, tamaño)</p>
+                </div>
+                <div class="req-item">
+                    <h4> keyPressed()</h4>
+                    <p>Al presionar una tecla debe ocurrir algo</p>
+                </div>
+                <div class="req-item">
+                    <h4> Animación</h4>
+                    <p>Algo que se mueva solo (variables que cambian en draw)</p>
+                </div>
+            </div>
+
+            <div class="ideas-box">
+                <p><strong> Ideas para inspirarte:</strong></p>
+                <p>
+                    • Un paisaje nocturno con estrellas que parpadean (random) y una luna que sigue al mouse<br>
+                    • Una cara que cambia de expresión al hacer clic (if + mousePressed)<br>
+                    • Figuras geométricas que orbitan alrededor del mouse<br>
+                    • Un "pincel mágico" que dibuja patrones de colores aleatorios<br>
+                    • Una pelota que rebota y cambia de color con las teclas<br>
+                    • Un circuito de figuras que se mueven en cadena
+                </p>
+            </div>
+
+            <div style="background: rgba(231,76,60,0.1); border-radius: 12px; padding: 1rem; margin-top: 1rem;">
+                <p style="color: var(--text-dim); font-size: 0.9rem;">
+                    <strong> Entregable:</strong> Guarda tu código como <code>TuNombre.pde</code> y compártelo 
+                    con el profesor. ¡Sé creativo y diviértete!
+                </p>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- PLAYGROUND (extra para experimentar en el navegador) -->
+        <!-- ============================================================ -->
+        <div class="playground-extra">
+            <h2> Laboratorio rápido (opcional)</h2>
+            <p>Si quieres probar ideas rápido sin abrir Processing, escribe código aquí y haz clic en <strong>Ejecutar</strong>.
+            Usa <code>p.</code> antes de cada función (ej: <code>p.createCanvas()</code>, <code>p.ellipse()</code>).</p>
+            <div class="play-area">
+                <div>
+                    <div style="background:var(--code-bg); padding:0.4rem 1rem; border-radius:10px 10px 0 0; font-size:0.8rem; color:var(--text-dim); border-bottom:1px solid var(--border);">Código (p5.js)</div>
                     <textarea id="code-editor" spellcheck="false">p.setup = function() {
   p.createCanvas(400, 400);
+  p.background(30, 30, 60);
 };
 
 p.draw = function() {
-  p.background(20, 20, 40);
-  
-  // mouseX y mouseY
-  p.fill(231, 76, 60);
-  p.ellipse(p.mouseX, p.mouseY, 60, 60);
-  
-  // Un if con interacción
-  if (p.mouseX > 200) {
-    p.fill(46, 204, 113);
-  } else {
-    p.fill(243, 156, 18);
-  }
-  p.ellipse(200, 200, 80, 80);
+  // Tu código aquí
+};
+
+p.mousePressed = function() {
+  p.fill(p.random(255), p.random(255), p.random(255));
+  p.ellipse(p.mouseX, p.mouseY, p.random(20, 60), p.random(20, 60));
+};
+
+p.keyPressed = function() {
+  p.background(p.random(255), p.random(255), p.random(255));
 };</textarea>
                 </div>
                 <div>
-                    <div style="background:#111; padding:0.5rem 1rem; border-radius:12px 12px 0 0; font-size:0.8rem; color:var(--text-dim); border-bottom:1px solid var(--border);">
-                        Resultado
-                    </div>
-                    <div class="playground-canvas" id="playground-canvas">
+                    <div style="background:#111; padding:0.4rem 1rem; border-radius:10px 10px 0 0; font-size:0.8rem; color:var(--text-dim); border-bottom:1px solid var(--border);">Resultado</div>
+                    <div class="p-canvas" id="playground-canvas">
                         <div class="placeholder" id="playground-placeholder">
-                            <strong>Ejecuta el código</strong>
-                            <br>para verlo aquí
+                            Escribe código y presiona <strong>Ejecutar</strong>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="controls">
-                <button onclick="runCode()"> Ejecutar</button>
-                <button class="reset-btn" onclick="resetPlayground()"> Reiniciar</button>
-                <button class="reset-btn" onclick="loadExample('repaso')">Cargar repaso</button>
-                <button class="reset-btn" onclick="loadExample('ex1')">Cargar ejemplo 1</button>
-                <button class="reset-btn" onclick="loadExample('ex2')">Cargar ejemplo 2</button>
-                <button class="reset-btn" onclick="loadExample('ex3')">Cargar ejemplo 3</button>
-                <button class="reset-btn" onclick="loadExample('ex4')">Cargar ejemplo 4</button>
-                <div class="error-msg" id="playground-error"></div>
-            </div>
-        </div>
-
-        <!-- EJERCICIO PERSONAL -->
-        <div class="section-title">
-            <span class="num">4</span>
-            Tu proyecto personal
-        </div>
-
-        <div class="exercise">
-            <h2> Crea tu obra de arte interactiva</h2>
-            <p style="color: var(--text-dim); margin-bottom: 0.5rem;">
-                Usando todo lo que aprendimos (día 1 + día 2), crea tu propia composición interactiva original.
-                El tema es <strong>libre</strong>, pero debe incluir:
-            </p>
-            <div class="req-grid">
-                <div class="req-item">
-                    <h4> 2+ figuras diferentes</h4>
-                    <p>ellipse, rect, line, triangle, etc.</p>
-                </div>
-                <div class="req-item">
-                    <h4>  Colores</h4>
-                    <p>fill(), stroke(), background() con colores que te gusten</p>
-                </div>
-                <div class="req-item">
-                    <h4>  mouseX / mouseY</h4>
-                    <p>Al menos una figura debe seguir al mouse</p>
-                </div>
-                <div class="req-item">
-                    <h4>  Un if</h4>
-                    <p>Que cambie algo según una condición</p>
-                </div>
-                <div class="req-item">
-                    <h4>  mousePressed() o keyPressed()</h4>
-                    <p>Que pase algo al hacer clic o presionar tecla</p>
-                </div>
-                <div class="req-item">
-                    <h4>  Animación o random</h4>
-                    <p>Algo que cambie solo con el tiempo</p>
-                </div>
-            </div>
-
-            <div class="tip-box">
-                <p><strong> Ideas para inspirarte:</strong></p>
-                <p>
-                    • Un paisaje nocturno donde la luna sigue al mouse y las estrellas parpadean con random()<br>
-                    • Una cara que cambia de expresión cuando haces clic (if + mousePressed)<br>
-                    • Figuras geométricas que orbitan alrededor del mouse<br>
-                    • Un juego simple: una figura que debes atrapar con el mouse<br>
-                    • Un "pincel mágico" que dibuja patrones al mover el mouse
-                </p>
-            </div>
-            <div class="tip-box" style="border-left-color: var(--accent); margin-top: 0.8rem;">
-                <p><strong> Entregable:</strong> Copia tu código final en un archivo .pde o .txt y súbelo al classroom. 
-                ¡Puedes seguir experimentando en esta página!</p>
+            <div class="p-controls">
+                <button onclick="runPlayground()"> Ejecutar</button>
+                <button class="sec" onclick="resetPlayground()"> Reiniciar</button>
+                <button class="sec" onclick="loadPlayground(1)">Cargar ej.1</button>
+                <button class="sec" onclick="loadPlayground(2)">Cargar ej.2</button>
+                <button class="sec" onclick="loadPlayground(3)">Cargar ej.3</button>
+                <button class="sec" onclick="loadPlayground(4)">Cargar ej.4</button>
+                <div class="err" id="playground-error"></div>
             </div>
         </div>
 
     </main>
 
     <footer>
-        <p>Taller Gradécimo Processing &bull; Día 2: Interactividad y Animación &bull; Hecho con  para aprender</p>
+        <p>Taller Gradécimo Processing &bull; Día 2: Eventos, Aleatoriedad y Animación &bull; Hecho con  para aprender a crear</p>
     </footer>
 
+    <!-- ===== SCRIPTS ===== -->
+
     <script>
-    // ===== SKETCHES EMBEBIDOS (p5.js instance mode) =====
+    // ===== DEMOS EMBEBIDOS (p5.js instance mode) =====
 
-    // REPASO
+    // DEMO 1: mousePressed
     new p5((p) => {
         p.setup = function() {
-            let canvas = p.createCanvas(280, 280);
-            canvas.parent('sketch-repaso');
-        };
-        p.draw = function() {
+            let c = p.createCanvas(260, 260);
+            c.parent('demo-ex1');
             p.background(30, 30, 60);
-            
-            p.fill(231, 76, 60);
-            p.ellipse(70, 140, 60, 60);
-            
-            p.fill(46, 204, 113);
-            p.rect(170, 100, 80, 70);
-
-            if (p.mouseX < p.width / 2) {
-                p.fill(243, 156, 18);
-            } else {
-                p.fill(155, 89, 182);
-            }
-            let mx = p.mouseX;
-            let my = p.mouseY;
-            if (mx < 0) mx = 0;
-            if (mx > p.width) mx = p.width;
-            if (my < 0) my = 0;
-            if (my > p.height) my = p.height;
-            p.ellipse(mx, my, 30, 30);
-        };
-    });
-
-    // EJEMPLO 1: Círculo curioso
-    new p5((p) => {
-        p.setup = function() {
-            let canvas = p.createCanvas(280, 280);
-            canvas.parent('sketch-ex1');
-        };
-        p.draw = function() {
-            p.background(20, 20, 40);
-            p.fill(231, 76, 60);
-            let mx = p.constrain(p.mouseX, 0, p.width);
-            let my = p.constrain(p.mouseY, 0, p.height);
-            p.ellipse(mx, my, 60, 60);
-            p.fill(243, 156, 18, 150);
-            p.ellipse(mx - 30, my - 30, 30, 30);
-        };
-    });
-
-    // EJEMPLO 2: Pinta con clics
-    new p5((p) => {
-        p.setup = function() {
-            let canvas = p.createCanvas(280, 280);
-            canvas.parent('sketch-ex2');
-            p.background(20, 20, 40);
         };
         p.draw = function() {};
         p.mousePressed = function() {
-            p.fill(p.random(255), p.random(255), p.random(255), 150);
             let mx = p.constrain(p.mouseX, 0, p.width);
             let my = p.constrain(p.mouseY, 0, p.height);
-            p.ellipse(mx, my, p.random(20, 50), p.random(20, 50));
+            p.fill(231, 76, 60);
+            p.ellipse(mx, my, 40, 40);
         };
     });
 
-    // EJEMPLO 3: Pelota que rebota
+    // DEMO 2: random
     new p5((p) => {
-        let x = 140, y = 140;
-        let velX = 2.5, velY = 1.8;
         p.setup = function() {
-            let canvas = p.createCanvas(280, 280);
-            canvas.parent('sketch-ex3');
+            let c = p.createCanvas(260, 260);
+            c.parent('demo-ex2');
+            p.background(30, 30, 60);
         };
-        p.draw = function() {
-            p.background(20, 20, 40);
-            p.fill(46, 204, 113);
-            p.ellipse(x, y, 35, 35);
-            x += velX;
-            y += velY;
-            if (x > p.width - 17 || x < 17) velX = -velX;
-            if (y > p.height - 17 || y < 17) velY = -velY;
-        };
-    });
-
-    // EJEMPLO 4: Arte generativo
-    new p5((p) => {
-        let t = 0;
-        p.setup = function() {
-            let canvas = p.createCanvas(280, 280);
-            canvas.parent('sketch-ex4');
-            p.colorMode(p.HSB, 360, 100, 100);
-        };
-        p.draw = function() {
-            p.background(0, 0, 10);
-            for (let i = 0; i < 10; i++) {
-                let angulo = t + i * 0.5;
-                let x = 140 + Math.sin(angulo) * 100;
-                let y = 140 + Math.cos(angulo) * 100;
-                p.fill(i * 36, 80, 90, 70);
-                let mx = p.constrain(p.mouseX, 10, p.width);
-                let my = p.constrain(p.mouseY, 10, p.height);
-                p.ellipse(x, y, 20 + mx / 15, 20 + my / 15);
-            }
-            t += 0.03;
-            p.fill(255);
-            p.noStroke();
-            p.textSize(10);
-            p.text("Clic = color | Tecla = reinicia", 50, 265);
-        };
+        p.draw = function() {};
         p.mousePressed = function() {
-            p.colorMode(p.random(3) < 1 ? p.RGB : p.HSB,
-                       p.random(255), p.random(255), p.random(255));
+            let mx = p.constrain(p.mouseX, 0, p.width);
+            let my = p.constrain(p.mouseY, 0, p.height);
+            p.fill(p.random(255), p.random(255), p.random(255));
+            p.ellipse(mx, my, p.random(20, 70), p.random(20, 70));
+        };
+    });
+
+    // DEMO 3: Animación
+    new p5((p) => {
+        let x = 0;
+        p.setup = function() {
+            let c = p.createCanvas(260, 200);
+            c.parent('demo-ex3');
+        };
+        p.draw = function() {
+            p.background(30, 30, 60);
+            p.fill(46, 204, 113);
+            p.ellipse(x, 100, 35, 35);
+            x = x + 2;
+            if (x > p.width + 20) x = -20;
+        };
+    });
+
+    // DEMO 4: keyPressed
+    new p5((p) => {
+        let x = 130, y = 130;
+        p.setup = function() {
+            let c = p.createCanvas(260, 260);
+            c.parent('demo-ex4');
+        };
+        p.draw = function() {
+            p.background(30, 30, 60);
+            p.fill(231, 76, 60);
+            p.ellipse(x, y, 40, 40);
+            p.fill(255);
+            p.textSize(11);
+            p.text("Usa A/D/W/S para mover", 55, 245);
         };
         p.keyPressed = function() {
-            p.setup();
-            t = 0;
+            if (p.key === 'a' || p.key === 'A') x -= 8;
+            if (p.key === 'd' || p.key === 'D') x += 8;
+            if (p.key === 'w' || p.key === 'W') y -= 8;
+            if (p.key === 's' || p.key === 'S') y += 8;
+            x = p.constrain(x, 20, p.width - 20);
+            y = p.constrain(y, 20, p.height - 20);
+        };
+    });
+
+    // DEMO 5: Rebote
+    new p5((p) => {
+        let x = 130, y = 130;
+        let vx = 2.5, vy = 1.8;
+        p.setup = function() {
+            let c = p.createCanvas(260, 260);
+            c.parent('demo-ex5');
+        };
+        p.draw = function() {
+            p.background(30, 30, 60);
+            p.fill(46, 204, 113);
+            p.ellipse(x, y, 35, 35);
+            x += vx; y += vy;
+            if (x > p.width - 17 || x < 17) vx = -vx;
+            if (y > p.height - 17 || y < 17) vy = -vy;
         };
     });
 
     // ===== PLAYGROUND =====
+    let pgSketch = null;
 
-    let currentSketch = null;
-
-    function runCode() {
+    function runPlayground() {
         const code = document.getElementById('code-editor').value;
-        const errorEl = document.getElementById('playground-error');
-        const placeholder = document.getElementById('playground-placeholder');
-        
-        // Limpiar sketch anterior
-        if (currentSketch) {
-            currentSketch.remove();
-            currentSketch = null;
-        }
-        
-        // Ocultar placeholder
-        placeholder.style.display = 'none';
-        errorEl.classList.remove('show');
-        
+        const errEl = document.getElementById('playground-error');
+        const ph = document.getElementById('playground-placeholder');
+        if (pgSketch) { pgSketch.remove(); pgSketch = null; }
+        ph.style.display = 'none';
+        errEl.classList.remove('show');
         try {
-            // Crear nueva función con el código del usuario
-            const sketchFn = new Function('p', code);
-            
-            currentSketch = new p5((p) => {
-                // Asignar las funciones del sketch del usuario
-                try {
-                    sketchFn(p);
-                } catch (e) {
-                    console.error('Error en el código:', e);
-                }
+            const fn = new Function('p', code);
+            pgSketch = new p5((p) => {
+                try { fn(p); } catch(e) { console.error(e); }
             }, 'playground-canvas');
-            
-        } catch (e) {
-            errorEl.textContent = ' Error: ' + e.message;
-            errorEl.classList.add('show');
-            placeholder.style.display = 'block';
+        } catch(e) {
+            errEl.textContent = ' Error: ' + e.message;
+            errEl.classList.add('show');
+            ph.style.display = 'block';
         }
     }
 
     function resetPlayground() {
-        if (currentSketch) {
-            currentSketch.remove();
-            currentSketch = null;
-        }
-        document.getElementById('code-editor').value = `p.setup = function() {
+        if (pgSketch) { pgSketch.remove(); pgSketch = null; }
+        document.getElementById('code-editor').value =
+`p.setup = function() {
   p.createCanvas(400, 400);
+  p.background(30, 30, 60);
 };
 
 p.draw = function() {
-  p.background(20, 20, 40);
-  
-  // mouseX y mouseY
-  p.fill(231, 76, 60);
-  p.ellipse(p.mouseX, p.mouseY, 60, 60);
-  
-  // Un if con interacción
-  if (p.mouseX > 200) {
-    p.fill(46, 204, 113);
-  } else {
-    p.fill(243, 156, 18);
-  }
-  p.ellipse(200, 200, 80, 80);
+  // Tu código aquí
+};
+
+p.mousePressed = function() {
+  p.fill(p.random(255), p.random(255), p.random(255));
+  p.ellipse(p.mouseX, p.mouseY, p.random(20, 60), p.random(20, 60));
+};
+
+p.keyPressed = function() {
+  p.background(p.random(255), p.random(255), p.random(255));
 };`;
         document.getElementById('playground-error').classList.remove('show');
         document.getElementById('playground-placeholder').style.display = 'block';
     }
 
-    // ===== CARGAR EJEMPLOS EN PLAYGROUND =====
+    function loadPlayground(num) {
+        const codes = {
+            1: `p.setup = function() {
+  p.createCanvas(400, 400);
+  p.background(30, 30, 60);
+};
 
-    function loadExample(id) {
-        const codeMap = {
-            'repaso': `p.setup = function() {
+p.draw = function() {};
+
+p.mousePressed = function() {
+  p.fill(231, 76, 60);
+  p.ellipse(p.mouseX, p.mouseY, 50, 50);
+};`,
+            2: `p.setup = function() {
+  p.createCanvas(400, 400);
+  p.background(30, 30, 60);
+};
+
+p.draw = function() {};
+
+p.mousePressed = function() {
+  p.fill(p.random(255), p.random(255), p.random(255));
+  p.ellipse(p.mouseX, p.mouseY, p.random(20, 80), p.random(20, 80));
+};`,
+            3: `let x = 0;
+
+p.setup = function() {
+  p.createCanvas(400, 200);
+};
+
+p.draw = function() {
+  p.background(30, 30, 60);
+  p.fill(46, 204, 113);
+  p.ellipse(x, 100, 40, 40);
+  x = x + 2;
+  if (x > p.width + 20) x = -20;
+};`,
+            4: `let x = 200, y = 200;
+
+p.setup = function() {
   p.createCanvas(400, 400);
 };
 
 p.draw = function() {
   p.background(30, 30, 60);
-  
-  // Figuras con colores
   p.fill(231, 76, 60);
-  p.ellipse(100, 200, 80, 80);
-  
-  p.fill(46, 204, 113);
-  p.rect(250, 160, 100, 80);
-  
-  // if: cambia color según el mouse
-  if (p.mouseX < p.width / 2) {
-    p.fill(243, 156, 18);
-  } else {
-    p.fill(155, 89, 182);
-  }
-  p.ellipse(p.mouseX, p.mouseY, 40, 40);
-};`,
-            'ex1': `p.setup = function() {
-  p.createCanvas(400, 400);
-};
-
-p.draw = function() {
-  p.background(20, 20, 40);
-  
-  // mouseX y mouseY siguen al mouse
-  p.fill(231, 76, 60);
-  p.ellipse(p.mouseX, p.mouseY, 60, 60);
-  
-  // Un segundo círculo offset
-  p.fill(243, 156, 18, 150);
-  p.ellipse(p.mouseX - 30, p.mouseY - 30, 30, 30);
-};`,
-            'ex2': `// Variables para guardar posición
-let x = 0, y = 0;
-
-p.setup = function() {
-  p.createCanvas(400, 400);
-  p.background(20, 20, 40);
-};
-
-p.draw = function() {
-  // draw vacío porque dibujamos en mousePressed
-};
-
-p.mousePressed = function() {
-  // Círculo de color aleatorio donde haces clic
-  p.fill(p.random(255), p.random(255), p.random(255), 150);
-  p.ellipse(p.mouseX, p.mouseY, p.random(20, 60), p.random(20, 60));
-};`,
-            'ex3': `// Variables para la pelota
-let x = 200, y = 200;
-let velX = 3, velY = 2;
-
-p.setup = function() {
-  p.createCanvas(400, 400);
-};
-
-p.draw = function() {
-  p.background(20, 20, 40);
-  
-  // Dibuja la pelota
-  p.fill(46, 204, 113);
-  p.ellipse(x, y, 40, 40);
-  
-  // Mueve la pelota
-  x = x + velX;
-  y = y + velY;
-  
-  // Rebota en bordes con if
-  if (x > p.width - 20 || x < 20) {
-    velX = -velX;
-  }
-  if (y > p.height - 20 || y < 20) {
-    velY = -velY;
-  }
-};`,
-            'ex4': `// Arte generativo interactivo
-let t = 0;
-
-p.setup = function() {
-  p.createCanvas(400, 400);
-  p.colorMode(p.HSB, 360, 100, 100);
-};
-
-p.draw = function() {
-  p.background(0, 0, 10);
-  
-  // Figuras que orbitan
-  for (let i = 0; i < 10; i++) {
-    let angulo = t + i * 0.5;
-    let x = 200 + Math.sin(angulo) * 150;
-    let y = 200 + Math.cos(angulo) * 150;
-    
-    p.fill(i * 36, 80, 90, 70);
-    p.ellipse(x, y, 30 + p.mouseX / 20, 30 + p.mouseY / 20);
-  }
-  
-  t = t + 0.02;
-  
-  p.fill(255);
-  p.textSize(12);
-  p.text("Clic cambia color | Tecla reinicia", 100, 380);
-};
-
-p.mousePressed = function() {
-  p.colorMode(p.random(3) < 1 ? p.RGB : p.HSB, 
-             p.random(255), p.random(255), p.random(255));
+  p.ellipse(x, y, 50, 50);
 };
 
 p.keyPressed = function() {
-  p.setup();
-  t = 0;
+  if (p.key === 'a') x -= 10;
+  if (p.key === 'd') x += 10;
+  if (p.key === 'w') y -= 10;
+  if (p.key === 's') y += 10;
 };`
         };
-        
-        if (codeMap[id]) {
-            document.getElementById('code-editor').value = codeMap[id];
-            runCode();
-        }
+        document.getElementById('code-editor').value = codes[num] || codes[1];
+        runPlayground();
     }
-
-    // ===== COPIAR CÓDIGO =====
-
-    function copyCode(id) {
-        const el = document.getElementById(id);
-        const text = el.textContent;
-        navigator.clipboard.writeText(text).then(() => {
-            // Feedback visual
-            const btn = el.parentElement.querySelector('button');
-            const original = btn.textContent;
-            btn.textContent = '¡Copiado!';
-            setTimeout(() => btn.textContent = original, 1500);
-        });
-    }
-
-    // Cargar el playground con el código inicial
-    window.addEventListener('load', () => {
-        // El código inicial ya está en el textarea
-    });
     </script>
+
 </body>
 </html>
