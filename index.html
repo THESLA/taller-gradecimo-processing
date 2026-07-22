@@ -257,6 +257,11 @@
             overflow-x: auto;
             tab-size: 4;
             white-space: pre;
+            user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            -moz-user-select: none;
+            -webkit-touch-callout: none;
         }
         .notebook-step pre .cm { color: #8a7a6a; font-style: italic; }
         .notebook-step pre .kw { color: #e74c3c; font-weight: 600; }
@@ -1031,15 +1036,40 @@ p.keyPressed = function() {
             <div class="p-controls">
                 <button onclick="runPlayground()"> Ejecutar</button>
                 <button class="sec" onclick="resetPlayground()"> Reiniciar</button>
-                <button class="sec" onclick="loadPlayground(1)">Cargar ej.1</button>
-                <button class="sec" onclick="loadPlayground(2)">Cargar ej.2</button>
-                <button class="sec" onclick="loadPlayground(3)">Cargar ej.3</button>
-                <button class="sec" onclick="loadPlayground(4)">Cargar ej.4</button>
+
                 <div class="err" id="playground-error"></div>
             </div>
         </div>
 
     </main>
+
+    <!-- ===== BLOQUEAR COPIA EN CÓDIGOS DEL CUADERNO ===== -->
+    <script>
+    // Evita que copien los códigos de los cuadernos (deben copiar a mano)
+    document.querySelectorAll('.notebook-step pre').forEach(el => {
+        el.addEventListener('copy', (e) => {
+            e.preventDefault();
+            alert('✋ No puedes copiar este código. ¡Cópialo a mano en tu cuaderno!');
+            return false;
+        });
+        el.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            alert('✋ No puedes copiar este código. ¡Escríbelo a mano!');
+            return false;
+        });
+        el.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && (e.key === 'c' || e.key === 'C' || e.key === 'a' || e.key === 'A')) {
+                e.preventDefault();
+                alert('✋ No puedes copiar este código. ¡Cópialo a mano en tu cuaderno!');
+                return false;
+            }
+        });
+        el.addEventListener('selectstart', (e) => {
+            e.preventDefault();
+            return false;
+        });
+    });
+    </script>
 
     <footer>
         <p>Taller Gradécimo Processing &bull; Día 2: Eventos, Aleatoriedad y Animación &bull; Hecho con  para aprender a crear</p>
