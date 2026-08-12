@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Taller Processing - Día 2: Eventos, Aleatoriedad y Animación</title>
+    <title>Taller 2: Repetición, Funciones y Juego</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js"></script>
     <style>
         :root {
@@ -11,6 +11,7 @@
             --secondary: #f39c12;
             --accent: #2ecc71;
             --blue: #3498db;
+            --purple: #9b59b6;
             --bg: #0d0d1a;
             --card: #1a1a2e;
             --code-bg: #16213e;
@@ -69,7 +70,7 @@
 
         /* HEADER */
         header {
-            background: linear-gradient(135deg, #2c3e50, #3498db, #2ecc71);
+            background: linear-gradient(135deg, #2c3e50, #9b59b6, #3498db);
             padding: 3rem 2rem 4.5rem;
             text-align: center;
             clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
@@ -119,7 +120,7 @@
             margin-bottom: 2rem;
         }
         .objectives h2 {
-            color: var(--blue);
+            color: var(--purple);
             font-size: 1.3rem;
             margin-bottom: 1rem;
         }
@@ -192,7 +193,7 @@
             justify-content: center;
             width: 40px;
             height: 40px;
-            background: var(--primary);
+            background: var(--purple);
             color: white;
             border-radius: 12px;
             font-size: 1.1rem;
@@ -206,7 +207,7 @@
             padding: 1.8rem 2rem;
             margin-bottom: 2rem;
             border: 1px solid var(--border);
-            border-left: 4px solid var(--blue);
+            border-left: 4px solid var(--purple);
         }
         .exercise-card .ex-header {
             display: flex;
@@ -218,7 +219,7 @@
         }
         .exercise-card .ex-header h3 {
             font-size: 1.2rem;
-            color: var(--blue);
+            color: var(--purple);
         }
         .exercise-card .ex-header .tags {
             display: flex;
@@ -226,8 +227,8 @@
             flex-wrap: wrap;
         }
         .exercise-card .ex-header .tags span {
-            background: rgba(52, 152, 219, 0.15);
-            color: var(--blue);
+            background: rgba(155, 89, 182, 0.15);
+            color: var(--purple);
             padding: 0.15rem 0.65rem;
             border-radius: 10px;
             font-size: 0.7rem;
@@ -240,7 +241,7 @@
             line-height: 1.6;
         }
 
-        /* DEMO + CODE SIDE BY SIDE */
+        /* DEMO + CODE */
         .ex-demo-row {
             display: grid;
             grid-template-columns: 280px 1fr;
@@ -257,6 +258,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
+        }
+        .ex-demo-row .demo-canvas.short {
+            aspect-ratio: 2 / 1;
         }
         .ex-demo-row .demo-canvas canvas {
             display: block;
@@ -277,9 +281,6 @@
             align-items: center;
             gap: 0.5rem;
             margin-bottom: 0.8rem;
-        }
-        .notebook-step .step-label .icon {
-            font-size: 1.3rem;
         }
         .notebook-step .step-label h4 {
             color: var(--notebook-text);
@@ -538,16 +539,16 @@
     <nav class="nav-top">
         <div class="nav-brand"> Taller Gradécimo <span>Processing</span></div>
         <div style="display:flex; gap:0.5rem;">
-            <a href="index.html" class="active">Taller 1</a>
-            <a href="taller-2.html">Taller 2</a>
+            <a href="index.html">Taller 1</a>
+            <a href="taller-2.html" class="active">Taller 2</a>
         </div>
     </nav>
 
     <!-- ===== HEADER ===== -->
     <header>
-        <h1>Processing: Eventos, Aleatoriedad y Animación</h1>
-        <p class="subtitle">Aprende a hacer programas que reaccionan al mouse, al teclado y al tiempo</p>
-        <span class="badge-day">DÍA 2 &bull; Taller Gradécimo Processing</span>
+        <h1>Taller 2: Repetición, Funciones y Juegos</h1>
+        <p class="subtitle">Aprende a repetir sin escribir de más, a crear tus propias funciones y ¡a hacer tu primer juego!</p>
+        <span class="badge-day">TALLER 2 &bull; Taller Gradécimo Processing</span>
     </header>
 
     <!-- ===== MAIN ===== -->
@@ -555,17 +556,18 @@
 
         <!-- OBJETIVOS -->
         <div class="objectives">
-            <h2> Quésabemos y qué vamos a aprender hoy</h2>
+            <h2> Lo que ya sabes y lo que vas a aprender hoy</h2>
             <div class="grid-ob">
                 <ul>
-                    <li class="old"> Ya sabemos: setup(), draw(), figuras, colores, if, mouseX, mouseY, int y float</li>
-                    <li class="new"> <strong>mousePressed()</strong> — hacer que pase algo al hacer clic</li>
-                    <li class="new"> <strong>random()</strong> — números al azar para crear variedad</li>
+                    <li class="old"> Del taller 1: setup(), draw(), figuras, colores, if, variables, mouseX/mouseY</li>
+                    <li class="old"> Eventos: mousePressed(), keyPressed() y random()</li>
+                    <li class="new"> <strong>for()</strong> — repetir sin escribir 10 veces lo mismo</li>
+                    <li class="new"> <strong>mouseDragged()</strong> — pintar mientras arrastras el mouse</li>
                 </ul>
                 <ul>
-                    <li class="new"> <strong>Animación</strong> — variables que cambian en draw() para dar movimiento</li>
-                    <li class="new"> <strong>keyPressed()</strong> — controlar el programa con el teclado</li>
-                    <li class="new"> <strong>Proyecto final</strong> — tu propia obra interactiva combinándolo todo</li>
+                    <li class="new"> <strong>Funciones propias</strong> — crear tus propias órdenes (void dibujarFlor())</li>
+                    <li class="new"> <strong>dist()</strong> — medir la distancia entre dos puntos</li>
+                    <li class="new"> <strong>Juego final</strong> — "Atrapa la estrella" combinando todo</li>
                 </ul>
             </div>
         </div>
@@ -584,209 +586,38 @@
         </div>
 
         <!-- ============================================================ -->
-        <!-- EJERCICIO 1: mousePressed -->
+        <!-- EJERCICIO 1: for -->
         <!-- ============================================================ -->
         <div class="section-title">
             <span class="num">1</span>
-            mousePressed() — Reaccionar al clic
+            for() — Repite sin escribir de más
         </div>
 
         <div class="exercise-card">
             <div class="ex-header">
-                <h3>Ejercicio 1: "Dibuja con clics"</h3>
+                <h3>Ejercicio 1: "Diez círculos"</h3>
                 <div class="tags">
-                    <span>mousePressed</span>
-                    <span>eventos</span>
+                    <span>for</span>
+                    <span>repetir</span>
+                    <span>i</span>
                 </div>
             </div>
             <p class="ex-desc">
-                <strong>¿Qué vamos a aprender?</strong> Processing tiene funciones especiales que se ejecutan 
-                <em>automáticamente</em> cuando ocurre algo. <code>mousePressed()</code> se ejecuta cada vez 
-                que haces clic con el mouse. ¡Es como un <code>draw()</code> que solo corre cuando cliqueas!
+                <strong>¿Qué vamos a aprender?</strong> Si quieres dibujar 10 círculos seguidos, 
+                ¡no tienes que escribir 10 veces la línea de <code>ellipse()</code>! Con el bucle 
+                <code>for</code> escribes el código UNA vez y él lo repite las veces que quieras. 
+                La variable <code>i</code> va contando: 0, 1, 2, 3... y puedes usarla para cambiar la posición.
             </p>
 
             <div class="ex-demo-row">
-                <div class="demo-canvas" id="demo-ex1"></div>
-                <div>
-                    <!-- PASO 1: CUADERNO -->
-                    <div class="notebook-step">
-                        <div class="step-label">
-                            <span class="icon"></span>
-                            <h4>Paso 1: Copia esto en tu cuaderno</h4>
-                        </div>
-                        <pre><span class="cm">// mousePressed: dibuja un círculo donde cliqueas</span>
-
-<span class="kw">void</span> <span class="fn">setup</span>() {
-  <span class="fn">size</span>(400, 400);
-  <span class="fn">background</span>(30, 30, 60);
-}
-
-<span class="kw">void</span> <span class="fn">draw</span>() {
-  <span class="cm">// Vacío: no necesitamos dibujar continuamente</span>
-}
-
-<span class="kw">void</span> <span class="fn">mousePressed</span>() {
-  <span class="fn">fill</span>(231, 76, 60);
-  <span class="fn">ellipse</span>(mouseX, mouseY, 50, 50);
-}</pre>
-                    </div>
-
-                    <!-- PASO 2: COMPUTADOR -->
-                    <div class="computer-step">
-                        <div class="step-label">
-                            <span class="icon"> </span>
-                            <h4>Paso 2: Escríbelo en Processing y ejecútalo</h4>
-                        </div>
-                        <p>Abre Processing, escribe el código, haz clic en <strong>Play (▶)</strong> y 
-                        después haz clic en cualquier parte del canvas. Cada clic dibuja un círculo rojo.</p>
-                    </div>
-
-                    <!-- PASO 3: PROFESOR -->
-                    <div class="computer-step" style="border-left-color: var(--primary); background: rgba(231, 76, 60, 0.06);">
-                        <div class="step-label">
-                            <span class="icon"> </span>
-                            <h4 style="color: var(--primary);">Paso 3: Muéstraselo al profesor</h4>
-                        </div>
-                        <p>Cuando lo tengas funcionando, llama al profesor para mostrarle que cada clic 
-                        dibuja un círculo rojo. Esta es tu <strong>evidencia de trabajo</strong> de la clase.</p>
-                    </div>
-
-                    <!-- RETO -->
-                    <div class="challenge">
-                        <h5> Modifica y experimenta</h5>
-                        <p>Cambia el color del fill(), prueba con diferentes valores RGB. 
-                        ¿Qué pasa si cambias el tamaño del ellipse() a 80? ¿Y si pones 
-                        <code>background(30, 30, 60);</code> dentro de <code>mousePressed()</code> en lugar de 
-                        <code>setup()</code>?</p>
-                    </div>
-
-                    <!-- PREGUNTA -->
-                    <div class="challenge" style="border-color: var(--accent);">
-                        <h5> Para pensar</h5>
-                        <p>¿Por qué el canvas no se borra cada vez que haces clic? ¿Qué pasaría si 
-                        movemos <code>background()</code> a <code>draw()</code>?</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ============================================================ -->
-        <!-- EJERCICIO 2: random -->
-        <!-- ============================================================ -->
-        <div class="section-title">
-            <span class="num">2</span>
-            random() — Sorpresa y variedad
-        </div>
-
-        <div class="exercise-card">
-            <div class="ex-header">
-                <h3>Ejercicio 2: "Explosión de colores"</h3>
-                <div class="tags">
-                    <span>random</span>
-                    <span>mousePressed</span>
-                </div>
-            </div>
-            <p class="ex-desc">
-                <strong>¿Qué vamos a aprender?</strong> <code>random()</code> genera un número 
-                al azar entre 0 y el valor que le pases. Si escribes <code>random(255)</code>, 
-                te da cualquier número entre 0 y 255. ¡Cada clic será una sorpresa!
-            </p>
-
-            <div class="ex-demo-row">
-                <div class="demo-canvas" id="demo-ex2"></div>
+                <div class="demo-canvas short" id="demo-t2e1"></div>
                 <div>
                     <div class="notebook-step">
                         <div class="step-label">
                             <span class="icon"></span>
                             <h4>Paso 1: Copia esto en tu cuaderno</h4>
                         </div>
-                        <pre><span class="cm">// random: colores y tamaños aleatorios</span>
-
-<span class="kw">void</span> <span class="fn">setup</span>() {
-  <span class="fn">size</span>(400, 400);
-  <span class="fn">background</span>(30, 30, 60);
-}
-
-<span class="kw">void</span> <span class="fn">draw</span>() {
-}
-
-<span class="kw">void</span> <span class="fn">mousePressed</span>() {
-  <span class="cm">// fill con 3 valores aleatorios (R, G, B)</span>
-  <span class="fn">fill</span>(<span class="fn">random</span>(255), <span class="fn">random</span>(255), <span class="fn">random</span>(255));
-  <span class="cm">// ellipse con tamaño aleatorio entre 20 y 80</span>
-  <span class="fn">ellipse</span>(mouseX, mouseY, <span class="fn">random</span>(20, 80), <span class="fn">random</span>(20, 80));
-}</pre>
-                    </div>
-
-                    <div class="computer-step">
-                        <div class="step-label">
-                            <span class="icon"> </span>
-                            <h4>Paso 2: Escríbelo en Processing y ejecútalo</h4>
-                        </div>
-                        <p>Copia el código, ejecútalo y haz clic varias veces. Cada clic da un color 
-                        y tamaño diferente. ¡Nunca dos clics son iguales!</p>
-                    </div>
-
-                    <!-- PASO 3: PROFESOR -->
-                    <div class="computer-step" style="border-left-color: var(--primary); background: rgba(231, 76, 60, 0.06);">
-                        <div class="step-label">
-                            <span class="icon"> </span>
-                            <h4 style="color: var(--primary);">Paso 3: Muéstraselo al profesor</h4>
-                        </div>
-                        <p>Cuando tengas colores aleatorios apareciendo con cada clic, llama al profesor 
-                        para mostrarle tu <strong>explosión de colores</strong>. Lleva tu cuaderno con el código copiado.</p>
-                    </div>
-
-                    <div class="challenge">
-                        <h5> Modifica y experimenta</h5>
-                        <p>1. Cambia <code>random(20, 80)</code> por <code>random(10, 150)</code>.<br>
-                        2. Agrega <code>random(100, 255)</code> como cuarto valor del fill() para 
-                        cambiar la transparencia (alpha).<br>
-                        3. Haz que <code>background()</code> también use random cada cierto tiempo.</p>
-                    </div>
-
-                    <div class="challenge" style="border-color: var(--accent);">
-                        <h5> Para pensar</h5>
-                        <p>¿Qué diferencia hay entre <code>random(255)</code> y <code>random(20, 80)</code>? 
-                        ¿Cómo harías para que el color siempre tenga rojo alto (cerca de 255)?</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ============================================================ -->
-        <!-- EJERCICIO 3: Animación -->
-        <!-- ============================================================ -->
-        <div class="section-title">
-            <span class="num">3</span>
-            Animación — Movimiento con variables
-        </div>
-
-        <div class="exercise-card">
-            <div class="ex-header">
-                <h3>Ejercicio 3: "La pelota viajera"</h3>
-                <div class="tags">
-                    <span>variables</span>
-                    <span>animación</span>
-                    <span>draw</span>
-                </div>
-            </div>
-            <p class="ex-desc">
-                <strong>¿Qué vamos a aprender?</strong> <code>draw()</code> se ejecuta 60 veces por segundo. 
-                Si tenemos una variable <code>x</code> que empieza en 0 y en cada <code>draw()</code> 
-                hacemos <code>x = x + 2</code>, la figura se irá moviendo sola. ¡Esto es animación!
-            </p>
-
-            <div class="ex-demo-row">
-                <div class="demo-canvas" id="demo-ex3"></div>
-                <div>
-                    <div class="notebook-step">
-                        <div class="step-label">
-                            <span class="icon"></span>
-                            <h4>Paso 1: Copia esto en tu cuaderno</h4>
-                        </div>
-                        <pre><span class="cm">// Animación: una pelota que se mueve sola</span>
-<span class="kw">float</span> x = 0;
+                        <pre><span class="cm">// for: repite 10 veces dibujando círculos</span>
 
 <span class="kw">void</span> <span class="fn">setup</span>() {
   <span class="fn">size</span>(400, 200);
@@ -795,16 +626,10 @@
 <span class="kw">void</span> <span class="fn">draw</span>() {
   <span class="fn">background</span>(30, 30, 60);
   
-  <span class="cm">// Dibuja la pelota en la posición x</span>
-  <span class="fn">fill</span>(46, 204, 113);
-  <span class="fn">ellipse</span>(x, 100, 40, 40);
-  
-  <span class="cm">// Mueve la pelota: x aumenta cada frame</span>
-  x = x + 2;
-  
-  <span class="cm">// Si la pelota sale por la derecha, vuelve a empezar</span>
-  <span class="kw">if</span> (x &gt; width + 20) {
-    x = -20;
+  <span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; <span class="num">10</span>; i++) {
+    <span class="fn">fill</span>(<span class="num">52</span>, <span class="num">152</span>, <span class="num">219</span>);
+    <span class="cm">// i va cambiando: 0,1,2... cada uno un lugar distinto</span>
+    <span class="fn">ellipse</span>(i * <span class="num">40</span> + <span class="num">20</span>, <span class="num">100</span>, <span class="num">30</span>, <span class="num">30</span>);
   }
 }</pre>
                     </div>
@@ -814,8 +639,9 @@
                             <span class="icon"> </span>
                             <h4>Paso 2: Escríbelo en Processing y ejecútalo</h4>
                         </div>
-                        <p>La pelota verde cruza la pantalla de izquierda a derecha una y otra vez. 
-                        Prueba cambiando <code>x = x + 2</code> por <code>x = x + 5</code> o <code>x = x + 0.5</code>.</p>
+                        <p>Mira cómo aparecen 10 círculos azules en fila. Cambia el <code>10</code> por 
+                        <code>20</code> y observa qué pasa. Luego cambia el <code>40</code> por <code>10</code>. 
+                        ¿Cuántos círculos alcanzan a caber?</p>
                     </div>
 
                     <!-- PASO 3: PROFESOR -->
@@ -824,82 +650,79 @@
                             <span class="icon"> </span>
                             <h4 style="color: var(--primary);">Paso 3: Muéstraselo al profesor</h4>
                         </div>
-                        <p>Muestra al profesor la pelota moviéndose de lado a lado. 
-                        <strong>Enséñale también tu cuaderno</strong> con el código copiado para que vea tu trabajo.</p>
+                        <p>Muestra al profesor tu fila de círculos y <strong>tu cuaderno</strong> con el código 
+                        copiado. Explícale qué hace la variable <code>i</code>.</p>
                     </div>
 
                     <div class="challenge">
                         <h5> Modifica y experimenta</h5>
-                        <p>1. Agrega una variable <code>float y = 100;</code> y haz que la pelota también 
-                        se mueva verticalmente con <code>y = y + 1.5</code>.<br>
-                        2. Combínalo con <code>mousePressed()</code> para que al hacer clic la pelota 
-                        cambie de color con <code>fill(random(255), random(255), random(255))</code>.<br>
-                        3. ¿Puedes hacer que la velocidad también sea una variable?</p>
+                        <p>1. Cambia el color del fill() para que cada círculo sea de un color 
+                        diferente, usando <code>i</code>: <code>fill(i * 25, 100, 200)</code>.<br>
+                        2. Haz una fila vertical cambiando <code>i * 40 + 20</code> y la posición 
+                        <code>y</code>.<br>
+                        3. Cambia el tamaño del círculo: <code>ellipse(i * 40 + 20, 100, i, i)</code> 
+                        — los círculos crecen con cada repetición.</p>
+                    </div>
+
+                    <div class="challenge" style="border-color: var(--accent);">
+                        <h5> Para pensar</h5>
+                        <p>¿Por qué el primer círculo queda en <code>x = 20</code> y no en <code>x = 0</code>? 
+                        (Pista: cuando i = 0, ¿cuánto vale <code>i * 40 + 20</code>? ¿Y cuando i = 9?)</p>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- ============================================================ -->
-        <!-- EJERCICIO 4: Rebote + keyPressed -->
+        <!-- EJERCICIO 2: for + random -->
         <!-- ============================================================ -->
         <div class="section-title">
-            <span class="num">4</span>
-            keyPressed() — Control con teclado
+            <span class="num">2</span>
+            for + random() — Cielo estrellado
         </div>
 
         <div class="exercise-card">
             <div class="ex-header">
-                <h3>Ejercicio 4: "Controla con las teclas"</h3>
+                <h3>Ejercicio 2: "Cielo estrellado"</h3>
                 <div class="tags">
-                    <span>keyPressed</span>
-                    <span>if</span>
-                    <span>variables</span>
+                    <span>for</span>
+                    <span>random</span>
+                    <span>width/height</span>
                 </div>
             </div>
             <p class="ex-desc">
-                <strong>¿Qué vamos a aprender?</strong> Así como <code>mousePressed()</code> detecta 
-                clics, <code>keyPressed()</code> detecta cuando presionas una tecla. Podemos usar 
-                la variable <code>key</code> para saber qué tecla se presionó y hacer cosas diferentes 
-                con <code>if</code>.
+                <strong>¿Qué vamos a aprender?</strong> Combinando <code>for</code> con <code>random()</code> 
+                podemos generar <strong>100 estrellas en 5 líneas de código</strong>. Cada estrella nace 
+                en una posición aleatoria. También aprenderás las variables especiales 
+                <code>width</code> y <code>height</code> (el tamaño del canvas).
             </p>
 
             <div class="ex-demo-row">
-                <div class="demo-canvas" id="demo-ex4"></div>
+                <div class="demo-canvas" id="demo-t2e2"></div>
                 <div>
                     <div class="notebook-step">
                         <div class="step-label">
                             <span class="icon"></span>
                             <h4>Paso 1: Copia esto en tu cuaderno</h4>
                         </div>
-                        <pre><span class="cm">// keyPressed: controla la pelota con teclas</span>
-<span class="kw">float</span> x = 200;
-<span class="kw">float</span> y = 200;
+                        <pre><span class="cm">// Cielo estrellado: 100 estrellas con random</span>
 
 <span class="kw">void</span> <span class="fn">setup</span>() {
   <span class="fn">size</span>(400, 400);
+  <span class="fn">background</span>(20, 20, 50);
+  
+  <span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; <span class="num">100</span>; i++) {
+    <span class="kw">float</span> x = <span class="fn">random</span>(width);
+    <span class="kw">float</span> y = <span class="fn">random</span>(height);
+    <span class="kw">float</span> t = <span class="fn">random</span>(<span class="num">1</span>, <span class="num">4</span>);  <span class="cm">// tamaño 1 a 4</span>
+    
+    <span class="fn">fill</span>(<span class="fn">random</span>(200, 255), <span class="fn">random</span>(200, 255), <span class="num">200</span>);
+    <span class="fn">ellipse</span>(x, y, t, t);
+  }
 }
 
 <span class="kw">void</span> <span class="fn">draw</span>() {
-  <span class="fn">background</span>(30, 30, 60);
-  <span class="fn">fill</span>(231, 76, 60);
-  <span class="fn">ellipse</span>(x, y, 50, 50);
-}
-
-<span class="kw">void</span> <span class="fn">keyPressed</span>() {
-  <span class="cm">// La variable 'key' guarda la tecla presionada</span>
-  <span class="kw">if</span> (key == <span class="str">'a'</span>) {
-    x = x - 10;
-  }
-  <span class="kw">if</span> (key == <span class="str">'d'</span>) {
-    x = x + 10;
-  }
-  <span class="kw">if</span> (key == <span class="str">'w'</span>) {
-    y = y - 10;
-  }
-  <span class="kw">if</span> (key == <span class="str">'s'</span>) {
-    y = y + 10;
-  }
+  <span class="cm">// Está vacío: las estrellas ya quedaron dibujadas</span>
 }</pre>
                     </div>
 
@@ -908,8 +731,9 @@
                             <span class="icon"> </span>
                             <h4>Paso 2: Escríbelo en Processing y ejecútalo</h4>
                         </div>
-                        <p>Presiona las teclas <strong>A, D, W, S</strong> para mover el círculo rojo. 
-                        Observa cómo <code>key</code> guarda el carácter de la tecla que presionaste.</p>
+                        <p>Cada vez que ejecutas, las estrellas salen en lugares DIFERENTES gracias a 
+                        <code>random()</code>. Presiona Play varias veces para verlo. Cambia el 
+                        <code>100</code> por <code>1000</code>… ¡todo un cielo!</p>
                     </div>
 
                     <!-- PASO 3: PROFESOR -->
@@ -918,98 +742,86 @@
                             <span class="icon"> </span>
                             <h4 style="color: var(--primary);">Paso 3: Muéstraselo al profesor</h4>
                         </div>
-                        <p>Demuestra al profesor que puedes mover el círculo con las teclas W, A, S, D. 
-                        <strong>Muestra tu cuaderno</strong> con el código y la explicación de cómo funciona keyPressed().</p>
+                        <p>Muestra tu cielo estrellado y <strong>tu cuaderno</strong> con el código copiado. 
+                        Explica qué hace <code>random(width)</code> y por qué el cielo cambia cada vez.</p>
                     </div>
 
                     <div class="challenge">
                         <h5> Modifica y experimenta</h5>
-                        <p>1. Agrega más teclas: por ejemplo, la <strong>barra espaciadora</strong> 
-                        (se representa como <code>' '</code>) para que la pelota vuelva al centro.<br>
-                        2. Combínalo con <code>keyPressed()</code> y <code>random()</code> para que 
-                        al presionar <strong>'c'</strong> la pelota cambie a un color aleatorio.<br>
-                        3. ¿Qué pasa si cambias <code>key == 'a'</code> por <code>key == 'a' || key == 'A'</code>?</p>
+                        <p>1. Agrega una <strong>luna</strong> amarilla fija en una esquina 
+                        (<code>fill(243, 156, 18); ellipse(50, 50, 40, 40);</code>).<br>
+                        2. Haz que algunas estrellas parpadeen: guarda las estrellas en variables 
+                        globales y dibújalas en <code>draw()</code> con un alpha aleatorio.<br>
+                        3. Cambia el cielo por un <strong>fondo de confeti</strong> de colores 
+                        completamente aleatorios.</p>
                     </div>
 
                     <div class="challenge" style="border-color: var(--accent);">
                         <h5> Para pensar</h5>
-                        <p>¿Cómo harías para que la pelota no se salga del canvas? 
-                        Pista: necesitas <code>if</code> para limitar <code>x</code> e <code>y</code> 
-                        entre 0 y <code>width</code>/<code>height</code>.</p>
+                        <p>¿Por qué dibujamos en <code>setup()</code> y no en <code>draw()</code>? 
+                        ¿Qué pasaría si el código del for estuviera dentro de <code>draw()</code>?</p>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- ============================================================ -->
-        <!-- EJERCICIO 5: Rebote (opcional si alcanza el tiempo) -->
+        <!-- EJERCICIO 3: mouseDragged -->
         <!-- ============================================================ -->
         <div class="section-title">
-            <span class="num">5</span>
-            Extra: La pelota que rebota (si te alcanza el tiempo)
+            <span class="num">3</span>
+            mouseDragged() — Pintar arrastrando
         </div>
 
-        <div class="exercise-card" style="border-left-color: var(--secondary);">
+        <div class="exercise-card">
             <div class="ex-header">
-                <h3>Ejercicio 5: Rebote en los bordes</h3>
+                <h3>Ejercicio 3: "Pincel mágico"</h3>
                 <div class="tags">
-                    <span>if</span>
-                    <span>velocidad</span>
-                    <span>desafío</span>
+                    <span>mouseDragged</span>
+                    <span>eventos</span>
                 </div>
             </div>
             <p class="ex-desc">
-                Combinando animación e <code>if</code>, podemos hacer que la pelota rebote 
-                como en un videojuego. Cuando la pelota llega al borde, invertimos su velocidad.
+                <strong>¿Qué vamos a aprender?</strong> <code>mousePressed()</code> se ejecuta UNA vez 
+                al hacer clic. <code>mouseDragged()</code> se ejecuta <strong>continuamente mientras 
+                mantienes el click y arrastras</strong>… ¡perfecto para pintar! Es como un pincel 
+                que dibuja mientras lo mueves.
             </p>
 
             <div class="ex-demo-row">
-                <div class="demo-canvas" id="demo-ex5"></div>
+                <div class="demo-canvas" id="demo-t2e3"></div>
                 <div>
                     <div class="notebook-step">
                         <div class="step-label">
                             <span class="icon"></span>
-                            <h4>Copia en tu cuaderno (si te alcanza el tiempo)</h4>
+                            <h4>Paso 1: Copia esto en tu cuaderno</h4>
                         </div>
-                        <pre><span class="cm">// Pelota que rebota en los 4 bordes</span>
-<span class="kw">float</span> x = 200;
-<span class="kw">float</span> y = 200;
-<span class="kw">float</span> velX = 3;
-<span class="kw">float</span> velY = 2;
+                        <pre><span class="cm">// Pincel mágico: pintas mientras arrastras</span>
 
 <span class="kw">void</span> <span class="fn">setup</span>() {
   <span class="fn">size</span>(400, 400);
+  <span class="fn">background</span>(30, 30, 60);
 }
 
 <span class="kw">void</span> <span class="fn">draw</span>() {
-  <span class="fn">background</span>(30, 30, 60);
-  
-  <span class="cm">// Dibuja la pelota</span>
-  <span class="fn">fill</span>(46, 204, 113);
-  <span class="fn">ellipse</span>(x, y, 40, 40);
-  
-  <span class="cm">// Mueve la pelota</span>
-  x = x + velX;
-  y = y + velY;
-  
-  <span class="cm">// Rebota en los bordes</span>
-  <span class="kw">if</span> (x &gt; width - 20 || x &lt; 20) {
-    velX = -velX;  <span class="cm">// Invierte dirección horizontal</span>
-  }
-  <span class="kw">if</span> (y &gt; height - 20 || y &lt; 20) {
-    velY = -velY;  <span class="cm">// Invierte dirección vertical</span>
-  }
+  <span class="cm">// Vacío: background NO se repite para no borrar</span>
+}
+
+<span class="kw">void</span> <span class="fn">mouseDragged</span>() {
+  <span class="cm">// Aleatorios: color y tamaño de cada pincelada</span>
+  <span class="fn">fill</span>(<span class="fn">random</span>(255), <span class="fn">random</span>(255), <span class="fn">random</span>(255), <span class="num">150</span>);
+  <span class="fn">ellipse</span>(mouseX, mouseY, <span class="fn">random</span>(10, 40), <span class="fn">random</span>(10, 40));
 }</pre>
                     </div>
 
-                    <!-- PASO 2: COMPUTADOR -->
                     <div class="computer-step">
                         <div class="step-label">
                             <span class="icon"> </span>
                             <h4>Paso 2: Escríbelo en Processing y ejecútalo</h4>
                         </div>
-                        <p>Copia el código en Processing y ejecútalo. Verás la pelota rebotando 
-                        sola en los bordes del canvas. Prueba cambiando los valores de <code>velX</code> y <code>velY</code>.</p>
+                        <p>Mantén presionado el mouse y muévelo por el canvas. ¡Estás pintando con 
+                        colores sorpresa! Importante: el <code>background()</code> está solo en 
+                        <code>setup()</code> para que no borre tu dibujo en cada frame.</p>
                     </div>
 
                     <!-- PASO 3: PROFESOR -->
@@ -1018,22 +830,237 @@
                             <span class="icon"> </span>
                             <h4 style="color: var(--primary);">Paso 3: Muéstraselo al profesor</h4>
                         </div>
-                        <p>Muestra al profesor la pelota rebotando en los bordes. 
-                        <strong>Enséñale tu cuaderno</strong> con el código y explícale cómo funciona 
-                        <code>velX = -velX</code> para que el rebote sea posible.</p>
+                        <p>Pinta una pequeña obra de arte y muéstrasela al profesor con 
+                        <strong>tu cuaderno</strong> donde tengas el código copiado.</p>
+                    </div>
+
+                    <div class="challenge">
+                        <h5> Modifica y experimenta</h5>
+                        <p>1. Cambia la <strong>transparencia</strong>: usa <code>random(50, 200)</code> 
+                        como 4to valor del fill() para pinceladas más suaves.<br>
+                        2. Agrega <code>stroke()</code> con un color para darle un borde a cada pincelada.<br>
+                        3. Combina con <code>keyPressed()</code>: al presionar <strong>'b'</strong> el fondo 
+                        se reinicia con <code>background(30, 30, 60);</code> para empezar de nuevo.</p>
                     </div>
 
                     <div class="challenge" style="border-color: var(--accent);">
                         <h5> Para pensar</h5>
-                        <p>¿Qué hace <code>velX = -velX</code>? ¿Porqué usamos <code>width - 20</code> 
-                        y no simplemente <code>width</code>? (Pista: el radio de la pelota es 20)</p>
+                        <p>¿Qué diferencia hay entre <code>mousePressed()</code>, <code>mouseDragged()</code> 
+                        y <code>mouseIsPressed</code>? ¿Para qué crees que serviría cada uno?</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- EJERCICIO 4: Funciones propias -->
+        <!-- ============================================================ -->
+        <div class="section-title">
+            <span class="num">4</span>
+            Funciones propias — Tú creas tus órdenes
+        </div>
+
+        <div class="exercise-card">
+            <div class="ex-header">
+                <h3>Ejercicio 4: "Mi función de flor"</h3>
+                <div class="tags">
+                    <span>void</span>
+                    <span>funciones</span>
+                    <span>parámetros</span>
+                </div>
+            </div>
+            <p class="ex-desc">
+                <strong>¿Qué vamos a aprender?</strong> Hasta ahora solo usábamos funciones que ya existían 
+                (<code>ellipse()</code>, <code>fill()</code>...). ¡Ahora vas a crear TUS PROPIAS funciones! 
+                Una función es una <strong>mini-máquina con nombre</strong> que puedes usar muchas veces. 
+                A los datos que recibe se les llama <strong>parámetros</strong> (cx, cy, tamaño).
+            </p>
+
+            <div class="ex-demo-row">
+                <div class="demo-canvas" id="demo-t2e4"></div>
+                <div>
+                    <div class="notebook-step">
+                        <div class="step-label">
+                            <span class="icon"></span>
+                            <h4>Paso 1: Copia esto en tu cuaderno</h4>
+                        </div>
+                        <pre><span class="cm">// Función propia: dibujaFlores con parámetros</span>
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">size</span>(400, 400);
+}
+
+<span class="kw">void</span> <span class="fn">draw</span>() {
+  <span class="fn">background</span>(30, 30, 60);
+  
+  <span class="cm">// Llamamos a NUESTRA función 3 veces</span>
+  <span class="fn">dibujaFlor</span>(<span class="num">100</span>, <span class="num">300</span>, <span class="num">50</span>);
+  <span class="fn">dibujaFlor</span>(<span class="num">300</span>, <span class="num">100</span>, <span class="num">70</span>);
+  <span class="fn">dibujaFlor</span>(mouseX, mouseY, <span class="num">30</span>);
+}
+
+<span class="cm">// Nuestra función: dibuja una flor en (cx, cy) con tamaño t</span>
+<span class="kw">void</span> <span class="fn">dibujaFlor</span>(<span class="kw">float</span> cx, <span class="kw">float</span> cy, <span class="kw">float</span> t) {
+  <span class="cm">// 4 pétalos (rojos)</span>
+  <span class="fn">fill</span>(231, 76, 60);
+  <span class="fn">ellipse</span>(cx - t/<span class="num">2</span>, cy, t/<span class="num">3</span>, t/<span class="num">3</span>);
+  <span class="fn">ellipse</span>(cx + t/<span class="num">2</span>, cy, t/<span class="num">3</span>, t/<span class="num">3</span>);
+  <span class="fn">ellipse</span>(cx, cy - t/<span class="num">2</span>, t/<span class="num">3</span>, t/<span class="num">3</span>);
+  <span class="fn">ellipse</span>(cx, cy + t/<span class="num">2</span>, t/<span class="num">3</span>, t/<span class="num">3</span>);
+  
+  <span class="cm">// Centro (amarillo)</span>
+  <span class="fn">fill</span>(243, 156, 18);
+  <span class="fn">ellipse</span>(cx, cy, t/<span class="num">3</span>, t/<span class="num">3</span>);
+}</pre>
+                    </div>
+
+                    <div class="computer-step">
+                        <div class="step-label">
+                            <span class="icon"> </span>
+                            <h4>Paso 2: Escríbelo en Processing y ejecútalo</h4>
+                        </div>
+                        <p>Verás 3 flores: dos fijas y una que sigue tu mouse. Prueba agregar más flores 
+                        cambiando los números. ¿Qué pasa si llamas a <code>dibujaFlor()</code> 10 veces 
+                        con un for?</p>
+                    </div>
+
+                    <!-- PASO 3: PROFESOR -->
+                    <div class="computer-step" style="border-left-color: var(--primary); background: rgba(231, 76, 60, 0.06);">
+                        <div class="step-label">
+                            <span class="icon"> </span>
+                            <h4 style="color: var(--primary);">Paso 3: Muéstraselo al profesor</h4>
+                        </div>
+                        <p>Muestra tus flores y <strong>tu cuaderno</strong> con el código. Explica qué 
+                        son los parámetros <code>cx</code>, <code>cy</code> y <code>t</code>.</p>
                     </div>
 
                     <div class="challenge">
-                        <h5> Modifica</h5>
-                        <p>Agrega <code>mousePressed()</code> para que al hacer clic la pelota 
-                        se teletransporte a la posición del mouse. Agrega <code>keyPressed()</code> 
-                        para que al presionar <strong>'r'</strong> reinicie la posición.</p>
+                        <h5> Modifica y experimenta</h5>
+                        <p>1. Crea una función <strong><code>dibujaCasa(float cx, float cy, float t)</code></strong> 
+                        con un rectángulo y un triángulo de techo.<br>
+                        2. Haz un <strong>jardín</strong>: usa un for para sembrar 10 flores en fila.<br>
+                        3. Haz tu función <strong>dibujaEstrella()</strong>: 4 pétalos con la función 
+                        que ya tienes… <em>¡las funciones pueden llamar a otras funciones!</em></p>
+                    </div>
+
+                    <div class="challenge" style="border-color: var(--accent);">
+                        <h5> Para pensar</h5>
+                        <p>¿Por qué es útil crear funciones? ¿Qué pasaría si quisiéramos dibujar 50 flores 
+                        sin funciones?</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!-- EJERCICIO 5: JUEGO -->
+        <!-- ============================================================ -->
+        <div class="section-title">
+            <span class="num">5</span>
+            Tu primer juego — Atrapa la estrella
+        </div>
+
+        <div class="exercise-card">
+            <div class="ex-header">
+                <h3>Ejercicio 5: "Atrapa la estrella"</h3>
+                <div class="tags">
+                    <span>juego</span>
+                    <span>dist</span>
+                    <span>score</span>
+                    <span>todo combinado</span>
+                </div>
+            </div>
+            <p class="ex-desc">
+                <strong>¿Qué vamos a aprender?</strong> ¡Llegó el momento de juntar TODO lo que sabes 
+                para hacer tu primer videojuego! Aprenderás <code>dist()</code> (distancia entre dos 
+                puntos), cómo sumar puntos (<code>score = score + 1</code>) y cómo crear una función 
+                <code>nuevaEstrella()</code> que ponga la estrella en otro lugar.
+            </p>
+
+            <div class="ex-demo-row">
+                <div class="demo-canvas" id="demo-t2e5"></div>
+                <div>
+                    <div class="notebook-step">
+                        <div class="step-label">
+                            <span class="icon"></span>
+                            <h4>Paso 1: Copia esto en tu cuaderno</h4>
+                        </div>
+                        <pre><span class="cm">// JUEGO: atrapa la estrella con clics</span>
+<span class="kw">float</span> estrellaX, estrellaY;
+<span class="kw">int</span> puntos = 0;
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">size</span>(400, 400);
+  <span class="fn">nuevaEstrella</span>();  <span class="cm">// estrella en un lugar al azar</span>
+}
+
+<span class="kw">void</span> <span class="fn">draw</span>() {
+  <span class="fn">background</span>(30, 30, 60);
+  
+  <span class="cm">// La estrella que debes atrapar</span>
+  <span class="fn">fill</span>(243, 156, 18);
+  <span class="fn">ellipse</span>(estrellaX, estrellaY, <span class="num">30</span>, <span class="num">30</span>);
+  
+  <span class="cm">// Tu "mano" que sigue al mouse</span>
+  <span class="fn">fill</span>(52, 152, 219, <span class="num">100</span>);
+  <span class="fn">ellipse</span>(mouseX, mouseY, <span class="num">40</span>, <span class="num">40</span>);
+  
+  <span class="cm">// Marcador de puntos</span>
+  <span class="fn">fill</span>(255);
+  <span class="fn">textSize</span>(<span class="num">20</span>);
+  <span class="fn">text</span>(<span class="str">"Puntos: "</span> + puntos, <span class="num">10</span>, <span class="num">30</span>);
+}
+
+<span class="kw">void</span> <span class="fn">mousePressed</span>() {
+  <span class="cm">// dist = distancia entre el clic y la estrella</span>
+  <span class="kw">if</span> (<span class="fn">dist</span>(mouseX, mouseY, estrellaX, estrellaY) &lt; <span class="num">40</span>) {
+    puntos = puntos + <span class="num">1</span>;  <span class="cm">// ¡Atrapada!</span>
+    <span class="fn">nuevaEstrella</span>();        <span class="cm">// La estrella se mueve</span>
+  }
+}
+
+<span class="cm">// Nuestra función: pone la estrella en un lugar aleatorio</span>
+<span class="kw">void</span> <span class="fn">nuevaEstrella</span>() {
+  estrellaX = <span class="fn">random</span>(<span class="num">30</span>, width - <span class="num">30</span>);
+  estrellaY = <span class="fn">random</span>(<span class="num">30</span>, height - <span class="num">30</span>);
+}</pre>
+                    </div>
+
+                    <div class="computer-step">
+                        <div class="step-label">
+                            <span class="icon"> </span>
+                            <h4>Paso 2: Escríbelo en Processing y ejecútalo</h4>
+                        </div>
+                        <p>Haz clic sobre la estrella amarilla para atraparla. Cada vez que la atrapas, 
+                        sumas un punto y la estrella salta a otro lugar. ¡Consigue el máximo de puntos 
+                        en 10 clics!</p>
+                    </div>
+
+                    <!-- PASO 3: PROFESOR -->
+                    <div class="computer-step" style="border-left-color: var(--primary); background: rgba(231, 76, 60, 0.06);">
+                        <div class="step-label">
+                            <span class="icon"> </span>
+                            <h4 style="color: var(--primary);">Paso 3: Muéstraselo al profesor</h4>
+                        </div>
+                        <p>Demuestra tu juego funcionando, suma al menos 3 puntos frente al profesor 
+                        y <strong>muestra tu cuaderno</strong> con el código copiado.</p>
+                    </div>
+
+                    <div class="challenge">
+                        <h5> Modifica y experimenta</h5>
+                        <p>1. Hazlo <strong>más difícil</strong>: cambia la estrella a <code>20</code> de 
+                        tamaño (tienes que estar más cerca) o haz que se mueva con animación.<br>
+                        2. Agrega <strong>vidas</strong>: si fallas 3 veces, el juego termina 
+                        (<code>noLoop();</code> detiene el programa).<br>
+                        3. Agrega un <strong>tiempo límite</strong>: la estrella se mueve sola 
+                        cada 2 segundos usando <code>frameCount</code>.<br>
+                        4. Cambia la estrella por otro animal o figura usando una función propia.</p>
+                    </div>
+
+                    <div class="challenge" style="border-color: var(--accent);">
+                        <h5> Para pensar</h5>
+                        <p>¿Por qué usamos <code>dist() &lt; 40</code> y no comparamos la posición exacta? 
+                        ¿Qué pasaría si el clic tuviera que caer exactamente sobre un punto?</p>
                     </div>
                 </div>
             </div>
@@ -1044,77 +1071,69 @@
         <!-- ============================================================ -->
         <div class="section-title">
             <span class="num">6</span>
-            Tu proyecto personal
+            Tu proyecto personal — Taller 2
         </div>
 
         <div class="final-project">
-            <h2> Crea tu propia obra de arte interactiva</h2>
+            <h2> Crea tu propio juego o composición</h2>
             <p style="color: var(--text-dim); margin-bottom: 0.3rem;">
-                Usando <strong>todo lo que aprendiste</strong> (hoy y la clase anterior), crea un programa original.
-                El tema es libre, pero debe incluir:
+                Usa todo lo aprendido en los dos talleres. Puedes mejorar el juego "Atrapa la estrella" 
+                o inventar uno totalmente nuevo. Tu proyecto debe incluir:
             </p>
             <div class="req-grid">
                 <div class="req-item">
-                    <h4> 2+ figuras</h4>
-                    <p>Usa al menos dos figuras diferentes (ellipse, rect, line, triangle...)</p>
+                    <h4> <code>for()</code></h4>
+                    <p>Algo repetido: filas, estrellas, enemigos...</p>
                 </div>
                 <div class="req-item">
-                    <h4>  Colores</h4>
-                    <p>fill(), stroke(), background() — usa colores que te gusten</p>
+                    <h4> <code>random()</code></h4>
+                    <p>Colores, posiciones o tamaños aleatorios</p>
                 </div>
                 <div class="req-item">
-                    <h4> mouseX / mouseY</h4>
-                    <p>Al menos una figura reacciona a la posición del mouse</p>
+                    <h4> Una función propia</h4>
+                    <p><code>void miFuncion(float cx, float cy)</code> usada al menos 2 veces</p>
                 </div>
                 <div class="req-item">
-                    <h4>  Un if</h4>
-                    <p>Una condición que cambie algo (color, posición, tamaño...)</p>
-                </div>
-                <div class="req-item">
-                    <h4> mousePressed()</h4>
-                    <p>Algo debe pasar cuando haces clic</p>
-                </div>
-                <div class="req-item">
-                    <h4> random()</h4>
-                    <p>Usa random en al menos una parte (color, posición, tamaño)</p>
+                    <h4> mousePressed() o mouseDragged()</h4>
+                    <p>Interacción con clic</p>
                 </div>
                 <div class="req-item">
                     <h4> keyPressed()</h4>
-                    <p>Al presionar una tecla debe ocurrir algo</p>
+                    <p>Acción con una tecla (reiniciar, cambiar velocidad...)</p>
                 </div>
                 <div class="req-item">
-                    <h4> Animación</h4>
-                    <p>Algo que se mueva solo (variables que cambian en draw)</p>
+                    <h4> Puntos o meta</h4>
+                    <p>Un marcador (score), un nivel o un objetivo claro</p>
                 </div>
             </div>
 
             <div class="ideas-box">
                 <p><strong> Ideas para inspirarte:</strong></p>
                 <p>
-                    • Un paisaje nocturno con estrellas que parpadean (random) y una luna que sigue al mouse<br>
-                    • Una cara que cambia de expresión al hacer clic (if + mousePressed)<br>
-                    • Figuras geométricas que orbitan alrededor del mouse<br>
-                    • Un "pincel mágico" que dibuja patrones de colores aleatorios<br>
-                    • Una pelota que rebota y cambia de color con las teclas<br>
-                    • Un circuito de figuras que se mueven en cadena
+                    • Atrapa la estrella con vidas, niveles y sonido visual (la estrella cambia de color)<br>
+                    • Esquiva los meteoritos: figuras que caen con random y tu personaje se mueve con teclas<br>
+                    • Jardín interactivo: cultiva flores con clics y riégalas con el mouse<br>
+                    • Mariposas: 20 mariposas que vuelan con random y tú las atrapas<br>
+                    • Paula (reloj) de colores: figuras que orbitan con for y cambian con teclas
                 </p>
             </div>
 
             <div style="background: rgba(231,76,60,0.1); border-radius: 12px; padding: 1rem; margin-top: 1rem;">
                 <p style="color: var(--text-dim); font-size: 0.9rem;">
-                    <strong> Entregable:</strong> Guarda tu código como <code>TuNombre.pde</code> y compártelo 
-                    con el profesor. ¡Sé creativo y diviértete!
+                    <strong> Entregable:</strong> Guarda tu programa como <code>TuNombre_Juego.pde</code>, 
+                    <strong>copia el código en tu cuaderno</strong> y preséntalo al profesor 
+                    funcionando. ¡El mejor juego del salón se compartirá con el grupo!
                 </p>
             </div>
         </div>
 
         <!-- ============================================================ -->
-        <!-- PLAYGROUND (extra para experimentar en el navegador) -->
+        <!-- PLAYGROUND -->
         <!-- ============================================================ -->
         <div class="playground-extra">
             <h2> Laboratorio rápido (opcional)</h2>
-            <p>Si quieres probar ideas rápido sin abrir Processing, escribe código aquí y haz clic en <strong>Ejecutar</strong>.
-            Usa <code>p.</code> antes de cada función (ej: <code>p.createCanvas()</code>, <code>p.ellipse()</code>).</p>
+            <p>Prueba ideas sin abrir Processing. Recuerda usar <code>p.</code> antes de cada función: 
+            <code>p.createCanvas()</code>, <code>p.ellipse()</code>, <code>p.mouseX</code>...</p>
             <div class="play-area">
                 <div>
                     <div style="background:var(--code-bg); padding:0.4rem 1rem; border-radius:10px 10px 0 0; font-size:0.8rem; color:var(--text-dim); border-bottom:1px solid var(--border);">Código (p5.js)</div>
@@ -1129,11 +1148,7 @@ p.draw = function() {
 
 p.mousePressed = function() {
   p.fill(p.random(255), p.random(255), p.random(255));
-  p.ellipse(p.mouseX, p.mouseY, p.random(20, 60), p.random(20, 60));
-};
-
-p.keyPressed = function() {
-  p.background(p.random(255), p.random(255), p.random(255));
+  p.ellipse(p.mouseX, p.mouseY, 30, 30);
 };</textarea>
                 </div>
                 <div>
@@ -1148,16 +1163,18 @@ p.keyPressed = function() {
             <div class="p-controls">
                 <button onclick="runPlayground()"> Ejecutar</button>
                 <button class="sec" onclick="resetPlayground()"> Reiniciar</button>
-
                 <div class="err" id="playground-error"></div>
             </div>
         </div>
 
     </main>
 
+    <footer>
+        <p>Taller Gradécimo Processing &bull; Taller 2: Repetición, Funciones y Juegos &bull; Hecho con  para aprender a crear</p>
+    </footer>
+
     <!-- ===== BLOQUEAR COPIA EN CÓDIGOS DEL CUADERNO ===== -->
     <script>
-    // Evita que copien los códigos de los cuadernos (deben copiar a mano)
     document.querySelectorAll('.notebook-step pre').forEach(el => {
         el.addEventListener('copy', (e) => {
             e.preventDefault();
@@ -1183,104 +1200,114 @@ p.keyPressed = function() {
     });
     </script>
 
-    <footer>
-        <p>Taller Gradécimo Processing &bull; Día 2: Eventos, Aleatoriedad y Animación &bull; Hecho con  para aprender a crear</p>
-    </footer>
-
-    <!-- ===== SCRIPTS ===== -->
+    <!-- ===== DEMOS EMBEBIDOS (p5.js instance mode) ===== -->
 
     <script>
-    // ===== DEMOS EMBEBIDOS (p5.js instance mode) =====
-
-    // DEMO 1: mousePressed
+    // DEMO 1: for
     new p5((p) => {
         p.setup = function() {
-            let c = p.createCanvas(260, 260);
-            c.parent('demo-ex1');
-            p.background(30, 30, 60);
-        };
-        p.draw = function() {};
-        p.mousePressed = function() {
-            let mx = p.constrain(p.mouseX, 0, p.width);
-            let my = p.constrain(p.mouseY, 0, p.height);
-            p.fill(231, 76, 60);
-            p.ellipse(mx, my, 40, 40);
-        };
-    });
-
-    // DEMO 2: random
-    new p5((p) => {
-        p.setup = function() {
-            let c = p.createCanvas(260, 260);
-            c.parent('demo-ex2');
-            p.background(30, 30, 60);
-        };
-        p.draw = function() {};
-        p.mousePressed = function() {
-            let mx = p.constrain(p.mouseX, 0, p.width);
-            let my = p.constrain(p.mouseY, 0, p.height);
-            p.fill(p.random(255), p.random(255), p.random(255));
-            p.ellipse(mx, my, p.random(20, 70), p.random(20, 70));
-        };
-    });
-
-    // DEMO 3: Animación
-    new p5((p) => {
-        let x = 0;
-        p.setup = function() {
-            let c = p.createCanvas(260, 200);
-            c.parent('demo-ex3');
+            let c = p.createCanvas(260, 130);
+            c.parent('demo-t2e1');
         };
         p.draw = function() {
             p.background(30, 30, 60);
-            p.fill(46, 204, 113);
-            p.ellipse(x, 100, 35, 35);
-            x = x + 2;
-            if (x > p.width + 20) x = -20;
+            for (let i = 0; i < 10; i++) {
+                p.fill(i * 14, i * 40, 219);
+                p.ellipse(i * 24 + 13, 65, 22, 22);
+            }
         };
     });
 
-    // DEMO 4: keyPressed
+    // DEMO 2: cielo estrellado
     new p5((p) => {
-        let x = 130, y = 130;
+        let stars = [];
         p.setup = function() {
             let c = p.createCanvas(260, 260);
-            c.parent('demo-ex4');
+            c.parent('demo-t2e2');
+            for (let i = 0; i < 90; i++) {
+                stars.push({
+                    x: p.random(260),
+                    y: p.random(260),
+                    s: p.random(1, 4)
+                });
+            }
+        };
+        p.draw = function() {
+            p.background(20, 20, 50);
+            for (let st of stars) {
+                p.fill(p.random(200, 255), p.random(200, 255), 200);
+                p.ellipse(st.x, st.y, st.s, st.s);
+            }
+        };
+    });
+
+    // DEMO 3: pincel mágico
+    new p5((p) => {
+        p.setup = function() {
+            let c = p.createCanvas(260, 260);
+            c.parent('demo-t2e3');
+            p.background(30, 30, 60);
+        };
+        p.draw = function() {};
+        p.mouseDragged = function() {
+            let mx = p.constrain(p.mouseX, 0, p.width);
+            let my = p.constrain(p.mouseY, 0, p.height);
+            p.fill(p.random(255), p.random(255), p.random(255), 150);
+            p.ellipse(mx, my, p.random(10, 35), p.random(10, 35));
+        };
+    });
+
+    // DEMO 4: función flor
+    new p5((p) => {
+        p.setup = function() {
+            let c = p.createCanvas(260, 260);
+            c.parent('demo-t2e4');
         };
         p.draw = function() {
             p.background(30, 30, 60);
+            drawFlower(60, 200, 40);
+            drawFlower(200, 60, 55);
+            drawFlower(p.mouseX, p.mouseY, 25);
+        };
+        function drawFlower(cx, cy, t) {
             p.fill(231, 76, 60);
-            p.ellipse(x, y, 40, 40);
+            p.ellipse(cx - t/2, cy, t/3, t/3);
+            p.ellipse(cx + t/2, cy, t/3, t/3);
+            p.ellipse(cx, cy - t/2, t/3, t/3);
+            p.ellipse(cx, cy + t/2, t/3, t/3);
+            p.fill(243, 156, 18);
+            p.ellipse(cx, cy, t/3, t/3);
+        }
+    });
+
+    // DEMO 5: juego atrapa la estrella
+    new p5((p) => {
+        let starX = 130, starY = 130, points = 0;
+        p.setup = function() {
+            let c = p.createCanvas(260, 260);
+            c.parent('demo-t2e5');
+            newStar();
+        };
+        p.draw = function() {
+            p.background(30, 30, 60);
+            p.fill(243, 156, 18);
+            p.ellipse(starX, starY, 28, 28);
+            p.fill(52, 152, 219, 100);
+            p.ellipse(p.mouseX, p.mouseY, 35, 35);
             p.fill(255);
-            p.textSize(11);
-            p.text("Usa A/D/W/S para mover", 55, 245);
+            p.textSize(14);
+            p.text("Puntos: " + points, 10, 20);
         };
-        p.keyPressed = function() {
-            if (p.key === 'a' || p.key === 'A') x -= 8;
-            if (p.key === 'd' || p.key === 'D') x += 8;
-            if (p.key === 'w' || p.key === 'W') y -= 8;
-            if (p.key === 's' || p.key === 'S') y += 8;
-            x = p.constrain(x, 20, p.width - 20);
-            y = p.constrain(y, 20, p.height - 20);
+        p.mousePressed = function() {
+            if (p.dist(p.mouseX, p.mouseY, starX, starY) < 35) {
+                points = points + 1;
+                newStar();
+            }
         };
-    });
-
-    // DEMO 5: Rebote
-    new p5((p) => {
-        let x = 130, y = 130;
-        let vx = 2.5, vy = 1.8;
-        p.setup = function() {
-            let c = p.createCanvas(260, 260);
-            c.parent('demo-ex5');
-        };
-        p.draw = function() {
-            p.background(30, 30, 60);
-            p.fill(46, 204, 113);
-            p.ellipse(x, y, 35, 35);
-            x += vx; y += vy;
-            if (x > p.width - 17 || x < 17) vx = -vx;
-            if (y > p.height - 17 || y < 17) vy = -vy;
-        };
+        function newStar() {
+            starX = p.random(20, p.width - 20);
+            starY = p.random(20, p.height - 20);
+        }
     });
 
     // ===== PLAYGROUND =====
@@ -1319,74 +1346,10 @@ p.draw = function() {
 
 p.mousePressed = function() {
   p.fill(p.random(255), p.random(255), p.random(255));
-  p.ellipse(p.mouseX, p.mouseY, p.random(20, 60), p.random(20, 60));
-};
-
-p.keyPressed = function() {
-  p.background(p.random(255), p.random(255), p.random(255));
+  p.ellipse(p.mouseX, p.mouseY, 30, 30);
 };`;
         document.getElementById('playground-error').classList.remove('show');
         document.getElementById('playground-placeholder').style.display = 'block';
-    }
-
-    function loadPlayground(num) {
-        const codes = {
-            1: `p.setup = function() {
-  p.createCanvas(400, 400);
-  p.background(30, 30, 60);
-};
-
-p.draw = function() {};
-
-p.mousePressed = function() {
-  p.fill(231, 76, 60);
-  p.ellipse(p.mouseX, p.mouseY, 50, 50);
-};`,
-            2: `p.setup = function() {
-  p.createCanvas(400, 400);
-  p.background(30, 30, 60);
-};
-
-p.draw = function() {};
-
-p.mousePressed = function() {
-  p.fill(p.random(255), p.random(255), p.random(255));
-  p.ellipse(p.mouseX, p.mouseY, p.random(20, 80), p.random(20, 80));
-};`,
-            3: `let x = 0;
-
-p.setup = function() {
-  p.createCanvas(400, 200);
-};
-
-p.draw = function() {
-  p.background(30, 30, 60);
-  p.fill(46, 204, 113);
-  p.ellipse(x, 100, 40, 40);
-  x = x + 2;
-  if (x > p.width + 20) x = -20;
-};`,
-            4: `let x = 200, y = 200;
-
-p.setup = function() {
-  p.createCanvas(400, 400);
-};
-
-p.draw = function() {
-  p.background(30, 30, 60);
-  p.fill(231, 76, 60);
-  p.ellipse(x, y, 50, 50);
-};
-
-p.keyPressed = function() {
-  if (p.key === 'a') x -= 10;
-  if (p.key === 'd') x += 10;
-  if (p.key === 'w') y -= 10;
-  if (p.key === 's') y += 10;
-};`
-        };
-        document.getElementById('code-editor').value = codes[num] || codes[1];
-        runPlayground();
     }
     </script>
 
