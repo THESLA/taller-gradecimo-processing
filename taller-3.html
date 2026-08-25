@@ -242,8 +242,8 @@
             border: 2px solid var(--border);
         }
         .demo-canvas.wide {
-            aspect-ratio: 10 / 7;
-            max-width: 500px;
+            aspect-ratio: 52 / 47;
+            max-width: 520px;
             width: 100%;
         }
         .demo-canvas.wide canvas {
@@ -509,14 +509,15 @@
         <div class="eval-banner">
             <h2> Tu tarea (evaluación periódica)</h2>
             <p>
-                Debes crear en <strong>Processing</strong> una <strong>tarjeta de presentación</strong> 
-                (como la escarapela que se lleva en la Feria de Ciencias) usando <strong>solo figuras</strong> 
-                (rect, ellipse, line, triangle, etc.) y texto. La tarjeta debe mostrar: el nombre de la feria, 
-                tu colegio, tu grado, tu nombre y el nombre de tu proyecto. <br><br>
+                Debes crear en <strong>Processing</strong> una <strong>escarapela de identificación</strong> 
+                (como la que se lleva en la Feria de Ciencias) usando <strong>solo figuras</strong> 
+                (rect, ellipse, line, triangle, etc.) y texto. La tarjeta debe mostrar TODOS tus datos: 
+                nombre completo, grado, <strong>edad</strong>, <strong>peso</strong>, <strong>estatura</strong>, 
+                <strong>tipo de sangre / RH</strong>, proyecto, categoría, municipio y fecha. <br><br>
                 <strong>El reto especial:</strong> cada vez que oprimas <strong>cualquier tecla</strong>, 
                 los colores del fondo, de las letras y de las demás figuras deben cambiar 
-                <strong>de forma aleatoria</strong>. Observa la tarjeta de referencia de abajo y 
-                constrúyela desde cero en tu computador.
+                <strong>de forma aleatoria</strong>. Observa la escarapela de referencia de abajo y 
+                constrúyela desde cero en tu computador, con tus propios datos.
             </p>
         </div>
 
@@ -549,12 +550,17 @@
             </div>
             <p class="ref-keypress-hint"> Haz clic en la tarjeta y oprime cualquier tecla para ver el cambio de colores </p>
 
-            <ul class="has-list">
-                <li>Marco decorativo (rectángulo con esquinas redondeadas)</li>
-                <li>Emblema/logo hecho con figuras (aquí un átomo: círculo + órbitas)</li>
-                <li>Título: <strong>"FERIA DE CIENCIAS"</strong></li>
-                <li>Subtítulo con el colegio y el grado</li>
-                <li>Líneas para "Proyecto" y "Estudiante"</li>
+            <ul class="has-list" style="grid-template-columns: 1fr 1fr;">
+                <li>Marco exterior con esquinas redondeadas + panel interior</li>
+                <li>Emblema/logo hecho con figuras (átomo: círculo + órbitas)</li>
+                <li>Título: <strong>"FERIA DE CIENCIAS"</strong> + subtítulo de colegio</li>
+                <li>Círculo "foto" decorativo en el centro</li>
+                <li><strong>Nombre</strong> completo del estudiante</li>
+                <li><strong>Grado</strong> y <strong>Edad</strong> (en años)</li>
+                <li><strong>Peso</strong> (kg) y <strong>Estatura</strong> (cm)</li>
+                <li><strong>Tipo de sangre / RH</strong> (ej. O+, A-, B+)</li>
+                <li><strong>Proyecto</strong> y <strong>Categoría</strong> de la feria</li>
+                <li><strong>Municipio</strong> y <strong>Fecha</strong></li>
                 <li>4 puntos decorativos en las esquinas</li>
                 <li><strong>Al oprimir tecla → todos los colores cambian al azar</strong></li>
             </ul>
@@ -615,45 +621,69 @@
             <details class="prof-code">
                 <summary> Código completo de la tarjeta de referencia (SOLO PARA EL PROFESOR — los alumnos no deben copiarlo)</summary>
                 <div class="notebook-step">
-                    <pre><span class="cm">// TARJETA REFERENCIA - NO COPIAR (es evaluación)</span>
-<span class="kw">float</span> rF, gF, bF, rT, gT, bT, rE, gE, bE, rM, gM, bM;
+                    <pre><span class="cm">// ESCARAPELA REFERENCIA - NO COPIAR (es evaluación)</span>
+<span class="kw">float</span> rF, gF, bF;   <span class="cm">// fondo</span>
+<span class="kw">float</span> rT, gT, bT;   <span class="cm">// título</span>
+<span class="kw">float</span> rE, gE, bE;   <span class="cm">// emblema y figuras</span>
+<span class="kw">float</span> rM, gM, bM;   <span class="cm">// marco</span>
+<span class="kw">float</span> rD, gD, bD;   <span class="cm">// texto de datos</span>
+<span class="kw">float</span> rP, gP, bP;   <span class="cm">// panel interior</span>
 
 <span class="kw">void</span> <span class="fn">setup</span>() {
-  <span class="fn">size</span>(500, 350);
-  rF = 30;  gF = 30;  bF = 80;
-  rT = 255; gT = 200; bT = 0;
+  <span class="fn">size</span>(520, 470);
+  rF = 25;  gF = 40;  bF = 90;
+  rT = 255; gT = 210; bT = 40;
   rE = 46;  gE = 204; bE = 113;
   rM = 243; gM = 156; bM = 18;
+  rD = 230; gD = 230; bD = 255;
+  rP = 15;  gP = 25;  bP = 55;
 }
 
 <span class="kw">void</span> <span class="fn">draw</span>() {
   <span class="fn">background</span>(rF, gF, bF);
-  
-  <span class="cm">// Marco</span>
+
+  <span class="cm">// Marco exterior</span>
   <span class="fn">stroke</span>(rM, gM, bM); <span class="fn">strokeWeight</span>(6); <span class="fn">noFill</span>();
-  <span class="fn">rect</span>(20, 20, width-40, height-40, 15);
-  
-  <span class="cm">// Emblema (átomo)</span>
-  <span class="fn">noStroke</span>(); <span class="fn">fill</span>(rE, gE, bE);
-  <span class="fn">ellipse</span>(width/2, 110, 40, 40);
-  <span class="fn">stroke</span>(rE, gE, bE); <span class="fn">strokeWeight</span>(3); <span class="fn">noFill</span>();
-  <span class="fn">ellipse</span>(width/2, 110, 90, 50);
-  <span class="fn">ellipse</span>(width/2, 110, 50, 90);
-  <span class="fn">noStroke</span>();
-  
-  <span class="cm">// Título y textos</span>
+  <span class="fn">rect</span>(15, 15, width-30, height-30, 20);
+
+  <span class="cm">// Panel interior</span>
+  <span class="fn">noStroke</span>(); <span class="fn">fill</span>(rP, gP, bP);
+  <span class="fn">rect</span>(30, 30, width-60, height-60, 14);
+
+  <span class="cm">// Título</span>
   <span class="fn">fill</span>(rT, gT, bT); <span class="fn">textAlign</span>(CENTER, CENTER);
-  <span class="fn">textSize</span>(34); <span class="fn">text</span>(<span class="str">"FERIA DE CIENCIAS"</span>, width/2, 200);
-  <span class="fn">fill</span>(255); <span class="fn">textSize</span>(18);
-  <span class="fn">text</span>(<span class="str">"Institución Educativa — Grado 10°"</span>, width/2, 240);
-  <span class="fn">fill</span>(rT, gT, bT); <span class="fn">textSize</span>(16);
-  <span class="fn">text</span>(<span class="str">"Proyecto: ____________________"</span>, width/2, 280);
-  <span class="fn">text</span>(<span class="str">"Estudiante: __________________"</span>, width/2, 305);
-  
+  <span class="fn">textSize</span>(30); <span class="fn">text</span>(<span class="str">"FERIA DE CIENCIAS"</span>, width/2, 65);
+  <span class="fn">textSize</span>(13); <span class="fn">fill</span>(rD);
+  <span class="fn">text</span>(<span class="str">"INSTITUCIÓN EDUCATIVA — MUNICIPIO"</span>, width/2, 92);
+
+  <span class="cm">// Emblema (átomo)</span>
+  <span class="fn">stroke</span>(rE, gE, bE); <span class="fn">strokeWeight</span>(3); <span class="fn">noFill</span>();
+  <span class="fn">ellipse</span>(width/2, 140, 55, 30);
+  <span class="fn">ellipse</span>(width/2, 140, 30, 55);
+  <span class="fn">noStroke</span>(); <span class="fn">fill</span>(rE, gE, bE);
+  <span class="fn">ellipse</span>(width/2, 140, 24, 24);
+
+  <span class="cm">// Círculo "foto"</span>
+  <span class="fn">stroke</span>(rM, gM, bM); <span class="fn">strokeWeight</span>(3); <span class="fn">noFill</span>();
+  <span class="fn">ellipse</span>(width/2, 200, 46, 46);
+  <span class="fn">noStroke</span>(); <span class="fn">fill</span>(rE, gE, bE, 120);
+  <span class="fn">ellipse</span>(width/2, 200, 40, 40);
+
+  <span class="cm">// DATOS del estudiante (alineados a la izquierda)</span>
+  <span class="fn">fill</span>(rD); <span class="fn">textAlign</span>(LEFT, CENTER); <span class="fn">textSize</span>(14);
+  <span class="kw">int</span> x = 55; <span class="kw">int</span> y = 250;
+  <span class="fn">text</span>(<span class="str">"Nombre: __________________________"</span>, x, y); y = y + 28;
+  <span class="fn">text</span>(<span class="str">"Grado: 10°          Edad: ______ años"</span>, x, y); y = y + 28;
+  <span class="fn">text</span>(<span class="str">"Peso: ______ kg     Estatura: ______ cm"</span>, x, y); y = y + 28;
+  <span class="fn">text</span>(<span class="str">"Tipo de sangre (RH): O+"</span>, x, y); y = y + 28;
+  <span class="fn">text</span>(<span class="str">"Proyecto: ________________________"</span>, x, y); y = y + 28;
+  <span class="fn">text</span>(<span class="str">"Categoría: _______________________"</span>, x, y); y = y + 28;
+  <span class="fn">text</span>(<span class="str">"Municipio: ________   Fecha: ______"</span>, x, y);
+
   <span class="cm">// Esquinas decorativas</span>
   <span class="fn">fill</span>(rE, gE, bE);
-  <span class="fn">ellipse</span>(60, 60, 12, 12); <span class="fn">ellipse</span>(width-60, 60, 12, 12);
-  <span class="fn">ellipse</span>(60, height-60, 12, 12); <span class="fn">ellipse</span>(width-60, height-60, 12, 12);
+  <span class="fn">ellipse</span>(40, 40, 10, 10); <span class="fn">ellipse</span>(width-40, 40, 10, 10);
+  <span class="fn">ellipse</span>(40, height-40, 10, 10); <span class="fn">ellipse</span>(width-40, height-40, 10, 10);
 }
 
 <span class="kw">void</span> <span class="fn">keyPressed</span>() {
@@ -661,6 +691,8 @@
   rT = <span class="fn">random</span>(255); gT = <span class="fn">random</span>(255); bT = <span class="fn">random</span>(255);
   rE = <span class="fn">random</span>(255); gE = <span class="fn">random</span>(255); bE = <span class="fn">random</span>(255);
   rM = <span class="fn">random</span>(255); gM = <span class="fn">random</span>(255); bM = <span class="fn">random</span>(255);
+  rD = <span class="fn">random</span>(255); gD = <span class="fn">random</span>(255); bD = <span class="fn">random</span>(255);
+  rP = <span class="fn">random</span>(255); gP = <span class="fn">random</span>(255); bP = <span class="fn">random</span>(255);
 }</pre>
                 </div>
             </details>
@@ -675,10 +707,15 @@
         <div class="ref-card-block" style="border-color: var(--blue);">
             <h3 style="color: var(--blue);"> Lista de requisitos obligatorios</h3>
             <ul class="has-list" style="grid-template-columns: 1fr;">
-                <li><strong>Figuras:</strong> mínimo usa <code>rect</code> (marco) y <code>ellipse</code> (emblema/logo), más las que quieras (líneas, triángulos, estrellas...)</li>
-                <li><strong>Texto:</strong> debe aparecer el nombre de la feria, tu colegio, tu grado, tu nombre y el nombre de tu proyecto</li>
-                <li><strong>Colores variables:</strong> el fondo, las letras y las figuras deben usar variables de color (no números fijos escritos en cada figura)</li>
-                <li><strong>keyPressed():</strong> al oprimir cualquier tecla, TODOS los colores (fondo + letras + figuras) cambian con <code>random()</code></li>
+                <li><strong>Figuras:</strong> mínimo usa <code>rect</code> (marco) y <code>ellipse</code> (emblema/logo y foto), más las que quieras (líneas, triángulos, estrellas...)</li>
+                <li><strong>Nombre y grado:</strong> tu nombre completo y tu grado (ej. 10°)</li>
+                <li><strong>Edad:</strong> tu edad en años (ej. "Edad: 15 años")</li>
+                <li><strong>Peso y estatura:</strong> tu peso en kg y tu estatura en cm</li>
+                <li><strong>Tipo de sangre / RH:</strong> obligatorio (ej. O+, A-, B+, AB-)</li>
+                <li><strong>Proyecto y categoría:</strong> el nombre de tu proyecto y su categoría en la feria</li>
+                <li><strong>Municipio y fecha:</strong> tu municipio y la fecha del evento</li>
+                <li><strong>Colores variables:</strong> fondo, letras, figuras y panel deben usar variables de color (no números fijos por figura)</li>
+                <li><strong>keyPressed():</strong> al oprimir cualquier tecla, TODOS los colores (fondo + letras + figuras + panel) cambian con <code>random()</code></li>
                 <li><strong>Originalidad:</strong> tu tarjeta debe ser diferente a la de referencia (otro logo, otros textos, tu propio estilo)</li>
                 <li><strong>Orden:</strong> código organizado, con comentarios, en tu cuaderno y en Processing</li>
             </ul>
@@ -698,7 +735,7 @@
                 </thead>
                 <tbody>
                     <tr><td>Figuras</td><td>Usa al menos 3 tipos distintos de figuras bien ubicadas</td><td class="pts">3</td></tr>
-                    <tr><td>Texto</td><td>Aparecen feria, colegio, grado, nombre y proyecto</td><td class="pts">3</td></tr>
+                    <tr><td>Datos del estudiante</td><td>Aparecen feria, nombre, grado, edad, peso, estatura, tipo de sangre/RH, proyecto, categoría, municipio y fecha</td><td class="pts">3</td></tr>
                     <tr><td>Variables de color</td><td>Colores guardados en variables, no fijos por figura</td><td class="pts">4</td></tr>
                     <tr><td>keyPressed + random</td><td>Oprimir tecla cambia TODO al azar (fondo, letras, figuras)</td><td class="pts">5</td></tr>
                     <tr><td>Originalidad y orden</td><td>Tarjeta propia, comentada, ordenada en cuaderno y PC</td><td class="pts">3</td></tr>
@@ -827,14 +864,16 @@ p.keyPressed = function() {
     <!-- DEMO REFERENCIA -->
     <script>
     new p5((p) => {
-        let rF, gF, bF, rT, gT, bT, rE, gE, bE, rM, gM, bM;
+        let rF, gF, bF, rT, gT, bT, rE, gE, bE, rM, gM, bM, rD, gD, bD, rP, gP, bP;
         p.setup = function() {
-            let c = p.createCanvas(500, 350);
+            let c = p.createCanvas(520, 470);
             c.parent('demo-t3ref');
-            rF = 30; gF = 30; bF = 80;
-            rT = 255; gT = 200; bT = 0;
+            rF = 25; gF = 40; bF = 90;
+            rT = 255; gT = 210; bT = 40;
             rE = 46; gE = 204; bE = 113;
             rM = 243; gM = 156; bM = 18;
+            rD = 230; gD = 230; bD = 255;
+            rP = 15; gP = 25; bP = 55;
         };
         p.draw = function() {
             p.background(rF, gF, bF);
@@ -842,43 +881,63 @@ p.keyPressed = function() {
             p.stroke(rM, gM, bM);
             p.strokeWeight(6);
             p.noFill();
-            p.rect(20, 20, p.width-40, p.height-40, 15);
+            p.rect(15, 15, p.width-30, p.height-30, 20);
 
             p.noStroke();
-            p.fill(rE, gE, bE);
-            p.ellipse(p.width/2, 110, 40, 40);
-            p.stroke(rE, gE, bE);
-            p.strokeWeight(3);
-            p.noFill();
-            p.ellipse(p.width/2, 110, 90, 50);
-            p.ellipse(p.width/2, 110, 50, 90);
-            p.noStroke();
+            p.fill(rP, gP, bP);
+            p.rect(30, 30, p.width-60, p.height-60, 14);
 
             p.fill(rT, gT, bT);
             p.textAlign(p.CENTER, p.CENTER);
-            p.textSize(34);
-            p.text("FERIA DE CIENCIAS", p.width/2, 200);
+            p.textSize(30);
+            p.text("FERIA DE CIENCIAS", p.width/2, 65);
+            p.textSize(13);
+            p.fill(rD);
+            p.text("INSTITUCIÓN EDUCATIVA — MUNICIPIO", p.width/2, 92);
 
-            p.fill(255);
-            p.textSize(18);
-            p.text("Institución Educativa — Grado 10°", p.width/2, 240);
+            p.stroke(rE, gE, bE);
+            p.strokeWeight(3);
+            p.noFill();
+            p.ellipse(p.width/2, 140, 55, 30);
+            p.ellipse(p.width/2, 140, 30, 55);
+            p.noStroke();
+            p.fill(rE, gE, bE);
+            p.ellipse(p.width/2, 140, 24, 24);
 
-            p.fill(rT, gT, bT);
-            p.textSize(16);
-            p.text("Proyecto: ____________________", p.width/2, 278);
-            p.text("Estudiante: __________________", p.width/2, 303);
+            p.stroke(rM, gM, bM);
+            p.strokeWeight(3);
+            p.noFill();
+            p.ellipse(p.width/2, 200, 46, 46);
+            p.noStroke();
+            p.fill(rE, gE, bE, 120);
+            p.ellipse(p.width/2, 200, 40, 40);
+
+            p.fill(rD);
+            p.textAlign(p.LEFT, p.CENTER);
+            p.textSize(14);
+            let x = 55;
+            let y = 250;
+            p.text("Nombre: __________________________", x, y); y = y + 28;
+            p.text("Grado: 10°          Edad: ______ años", x, y); y = y + 28;
+            p.text("Peso: ______ kg     Estatura: ______ cm", x, y); y = y + 28;
+            p.text("Tipo de sangre (RH): O+", x, y); y = y + 28;
+            p.text("Proyecto: ________________________", x, y); y = y + 28;
+            p.text("Categoría: _______________________", x, y); y = y + 28;
+            p.text("Municipio: ________   Fecha: ______", x, y);
 
             p.fill(rE, gE, bE);
-            p.ellipse(60, 60, 12, 12);
-            p.ellipse(p.width-60, 60, 12, 12);
-            p.ellipse(60, p.height-60, 12, 12);
-            p.ellipse(p.width-60, p.height-60, 12, 12);
+            p.ellipse(40, 40, 10, 10);
+            p.ellipse(p.width-40, 40, 10, 10);
+            p.ellipse(40, p.height-40, 10, 10);
+            p.ellipse(p.width-40, p.height-40, 10, 10);
         };
         p.keyPressed = function() {
             rF = p.random(255); gF = p.random(255); bF = p.random(255);
             rT = p.random(255); gT = p.random(255); bT = p.random(255);
             rE = p.random(255); gE = p.random(255); bE = p.random(255);
             rM = p.random(255); gM = p.random(255); bM = p.random(255);
+            rD = p.random(255); gD = p.random(255); bD = p.random(255);
+            rP = p.random(255); gP = p.random(255); bP = p.random(255);
         };
     });
 
