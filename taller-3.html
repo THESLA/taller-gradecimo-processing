@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taller 3: Tarjeta de Presentación — Feria de Ciencias</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js"></script>
+    <style>
+        :root {
+            --primary: #e74c3c;
+            --secondary: #f39c12;
+            --accent: #2ecc71;
+            --blue: #3498db;
+            --purple: #9b59b6;
+            --gold: #f1c40f;
+            --bg: #0d0d1a;
+            --card: #1a1a2e;
+            --code-bg: #16213e;
+            --text: #e8e8f0;
+            --text-dim: #9898b0;
+            --border: #2a2a4a;
+            --notebook: #f5e6c8;
+            --notebook-text: #2c1810;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* NAV */
+        .nav-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(26, 26, 46, 0.9);
+            border-bottom: 1px solid var(--border);
+            padding: 0.6rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(8px);
+        }
+        .nav-top .nav-brand {
+            font-weight: 800;
+            font-size: 0.9rem;
+            color: var(--text);
+        }
+        .nav-top .nav-brand span { color: var(--gold); }
+        .nav-top a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-size: 0.85rem;
+            padding: 0.35rem 0.9rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+        }
+        .nav-top a:hover {
+            color: white;
+            border-color: var(--gold);
+            background: rgba(241, 196, 15, 0.15);
+        }
+        .nav-top a.active {
+            color: white;
+            background: var(--gold);
+            border-color: var(--gold);
+            color: #0d0d1a;
+            font-weight: 700;
+        }
+
+        /* HEADER */
+        header {
+            background: linear-gradient(135deg, #1a5276, #6c3483, #c0392b);
+            padding: 3rem 2rem 4.5rem;
+            text-align: center;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            position: relative;
+        }
+        header h1 {
+            font-size: 2.4rem;
+            font-weight: 900;
+            color: white;
+            text-shadow: 0 3px 15px rgba(0,0,0,0.3);
+            letter-spacing: -1px;
+        }
+        header .subtitle {
+            font-size: 1.15rem;
+            color: rgba(255,255,255,0.92);
+            margin-top: 0.5rem;
+            font-weight: 300;
+        }
+        header .badge-day {
+            display: inline-block;
+            background: rgba(241, 196, 15, 0.95);
+            color: #0d0d1a;
+            padding: 0.3rem 1.2rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 800;
+            margin-top: 0.8rem;
+        }
+
+        /* MAIN */
+        main {
+            max-width: 960px;
+            margin: -2.5rem auto 0;
+            padding: 0 1.5rem 3rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* OBJECTIVES */
+        .objectives {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 1.8rem 2rem;
+            border: 1px solid var(--border);
+            margin-bottom: 2rem;
+        }
+        .objectives h2 {
+            color: var(--gold);
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+        .objectives ul { list-style: none; }
+        .objectives li {
+            padding: 0.3rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-dim);
+            font-size: 0.92rem;
+        }
+        .objectives li::before { content: '✓'; color: var(--accent); font-weight: 700; }
+
+        /* EVALUATION BANNER */
+        .eval-banner {
+            background: linear-gradient(135deg, rgba(231, 76, 60, 0.15), rgba(243, 156, 18, 0.1));
+            border: 2px solid var(--primary);
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+        }
+        .eval-banner h2 {
+            color: var(--primary);
+            font-size: 1.4rem;
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .eval-banner p {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+        .eval-banner strong { color: var(--text); }
+
+        /* METHOD BAR */
+        .method-bar {
+            display: flex;
+            gap: 1rem;
+            background: rgba(241, 196, 15, 0.1);
+            border: 1px solid rgba(241, 196, 15, 0.3);
+            border-radius: 14px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 2rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .method-bar .step {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+        }
+        .method-bar .step-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            background: var(--gold);
+            color: #0d0d1a;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+        .method-bar .arrow { color: var(--text-dim); font-size: 1.2rem; }
+
+        /* SECTION TITLE */
+        .section-title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin: 2.5rem 0 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        .section-title .num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: var(--gold);
+            color: #0d0d1a;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        /* REFERENCE CARD DISPLAY */
+        .ref-card-block {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 1.8rem 2rem;
+            border: 2px solid var(--gold);
+            margin-bottom: 2rem;
+        }
+        .ref-card-block h3 {
+            color: var(--gold);
+            font-size: 1.2rem;
+            margin-bottom: 0.4rem;
+        }
+        .ref-card-block .ref-sub {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            margin-bottom: 1.2rem;
+        }
+        .ref-canvas-wrap {
+            display: flex;
+            justify-content: center;
+            background: #111;
+            border-radius: 14px;
+            padding: 1.5rem;
+            border: 2px solid var(--border);
+        }
+        .demo-canvas.wide {
+            aspect-ratio: 10 / 7;
+            max-width: 500px;
+            width: 100%;
+        }
+        .demo-canvas.wide canvas {
+            display: block;
+            max-width: 100%;
+        }
+        .ref-keypress-hint {
+            text-align: center;
+            color: var(--gold);
+            font-size: 0.9rem;
+            margin-top: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* WHAT IT HAS */
+        .has-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.6rem 1.5rem;
+            margin-top: 1.2rem;
+        }
+        .has-list li {
+            list-style: none;
+            color: var(--text-dim);
+            font-size: 0.88rem;
+            display: flex;
+            gap: 0.5rem;
+            align-items: flex-start;
+        }
+        .has-list li::before { content: '▸'; color: var(--gold); }
+
+        /* NOTEBOOK STEP */
+        .notebook-step {
+            background: var(--notebook);
+            border-radius: 14px;
+            padding: 1.2rem 1.5rem;
+            margin: 1rem 0;
+            border: 2px dashed #c4a97a;
+            position: relative;
+        }
+        .notebook-step .step-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.8rem;
+        }
+        .notebook-step .step-label h4 {
+            color: var(--notebook-text);
+            font-size: 1rem;
+        }
+        .notebook-step pre {
+            background: #2c1810;
+            color: #f5e6c8;
+            padding: 1rem 1.2rem;
+            border-radius: 10px;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', 'Courier New', monospace;
+            font-size: 0.85rem;
+            line-height: 1.7;
+            overflow-x: auto;
+            tab-size: 4;
+            white-space: pre;
+            user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            -moz-user-select: none;
+            -webkit-touch-callout: none;
+        }
+        .notebook-step pre .cm { color: #8a7a6a; font-style: italic; }
+        .notebook-step pre .kw { color: #e74c3c; font-weight: 600; }
+        .notebook-step pre .fn { color: #3498db; }
+        .notebook-step pre .num { color: #f39c12; }
+        .notebook-step pre .str { color: #2ecc71; }
+        .notebook-step pre .var { color: #9b59b6; }
+        .notebook-step pre .bool { color: #e74c3c; }
+
+        /* COMPUTER STEP */
+        .computer-step {
+            background: rgba(46, 204, 113, 0.08);
+            border-left: 4px solid var(--accent);
+            padding: 1rem 1.5rem;
+            border-radius: 0 12px 12px 0;
+            margin: 1rem 0;
+        }
+        .computer-step .step-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.4rem;
+        }
+        .computer-step .step-label h4 {
+            color: var(--accent);
+            font-size: 1rem;
+        }
+        .computer-step p {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* CHALLENGE / REQUIREMENTS */
+        .challenge {
+            background: rgba(243, 156, 18, 0.08);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            margin: 0.8rem 0;
+            border: 1px solid rgba(243, 156, 18, 0.2);
+        }
+        .challenge h5 {
+            color: var(--secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+        .challenge p {
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        /* RUBRIC TABLE */
+        .rubric {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 1.8rem 2rem;
+            border: 2px solid var(--accent);
+            margin: 2rem 0;
+        }
+        .rubric h2 {
+            color: var(--accent);
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+        }
+        .rubric table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+        }
+        .rubric th, .rubric td {
+            padding: 0.7rem 0.8rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        .rubric th {
+            color: var(--gold);
+            font-weight: 700;
+        }
+        .rubric td { color: var(--text-dim); }
+        .rubric .pts { color: var(--accent); font-weight: 700; text-align: center; }
+
+        /* DETAILS / PROFESSOR CODE */
+        details.prof-code {
+            background: rgba(155, 89, 182, 0.08);
+            border: 1px dashed var(--purple);
+            border-radius: 12px;
+            padding: 0.5rem 1rem;
+            margin: 1rem 0;
+        }
+        details.prof-code summary {
+            cursor: pointer;
+            color: var(--purple);
+            font-weight: 700;
+            font-size: 0.9rem;
+            padding: 0.5rem 0;
+        }
+        details.prof-code .notebook-step { margin-top: 1rem; border-color: var(--purple); }
+
+        /* PLAYGROUND */
+        .playground-extra {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 1.8rem 2rem;
+            border: 2px solid var(--secondary);
+            margin: 2rem 0;
+        }
+        .playground-extra h2 { color: var(--secondary); font-size: 1.3rem; margin-bottom: 0.5rem; }
+        .playground-extra > p { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 1rem; }
+        .play-area { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        textarea {
+            width: 100%; height: 300px;
+            background: var(--code-bg); border: 2px solid var(--border);
+            border-radius: 12px; padding: 1rem;
+            color: #d4d4e8;
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.82rem; line-height: 1.6; resize: vertical; outline: none; tab-size: 4;
+        }
+        textarea:focus { border-color: var(--secondary); }
+        .p-canvas {
+            background: #111; border-radius: 12px; aspect-ratio: 1/1;
+            border: 2px solid var(--border); overflow: hidden;
+            display: flex; align-items: center; justify-content: center;
+            min-height: 280px; position: relative;
+        }
+        .p-canvas .placeholder { color: var(--text-dim); text-align: center; padding: 1rem; font-size: 0.9rem; }
+        .p-controls { display: flex; gap: 0.8rem; margin-top: 1rem; flex-wrap: wrap; align-items: center; }
+        .p-controls button {
+            background: var(--secondary); color: #0d0d1a; border: none;
+            padding: 0.6rem 1.8rem; border-radius: 10px; font-weight: 700;
+            font-size: 0.9rem; cursor: pointer; transition: transform 0.2s;
+        }
+        .p-controls button:hover { transform: translateY(-2px); }
+        .p-controls button.sec { background: rgba(255,255,255,0.08); color: var(--text); border: 1px solid var(--border); }
+        .p-controls .err { color: var(--primary); font-size: 0.8rem; background: rgba(231,76,60,0.1); padding: 0.4rem 0.8rem; border-radius: 8px; display: none; }
+        .p-controls .err.show { display: block; }
+
+        footer { text-align: center; padding: 2rem; color: #555; font-size: 0.85rem; border-top: 1px solid var(--border); }
+
+        @media (max-width: 750px) {
+            header h1 { font-size: 1.5rem; }
+            .has-list, .rubric table { font-size: 0.8rem; }
+            .play-area { grid-template-columns: 1fr; }
+            .method-bar .arrow { display: none; }
+            .rubric { overflow-x: auto; }
+        }
+        @media print {
+            .ref-canvas-wrap { display: none; }
+            .playground-extra { display: none; }
+            .method-bar { display: none; }
+            .nav-top { display: none; }
+            details.prof-code { display: none; }
+            header { clip-path: none; padding: 1.5rem; }
+            body { background: white; color: black; }
+            .ref-card-block, .rubric, .eval-banner, .objectives { background: white; border: 1px solid #ccc; }
+            .notebook-step { background: #fff8e8; border: 1px dashed #aaa; }
+            .notebook-step pre { background: #1a1a2e; color: #e8e8f0; font-size: 0.7rem; }
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    </style>
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav class="nav-top">
+        <div class="nav-brand"> Taller Gradécimo <span>Processing</span></div>
+        <div style="display:flex; gap:0.5rem;">
+            <a href="index.html">Taller 1</a>
+            <a href="taller-2.html">Taller 2</a>
+            <a href="taller-3.html" class="active">Taller 3</a>
+        </div>
+    </nav>
+
+    <!-- HEADER -->
+    <header>
+        <h1>Taller 3: Tarjeta de Presentación</h1>
+        <p class="subtitle">Tu escarapela para la Feria de Ciencias — hecha 100% con figuras en Processing</p>
+        <span class="badge-day">EVALUACIÓN &bull; Taller Gradécimo Processing</span>
+    </header>
+
+    <main>
+
+        <!-- OBJETIVOS -->
+        <div class="objectives">
+            <h2> Lo que necesitas para este taller</h2>
+            <ul>
+                <li>De los talleres 1 y 2: <code>setup()</code>, <code>draw()</code>, figuras, colores, <code>text()</code>, <code>random()</code>, <code>keyPressed()</code></li>
+                <li>Usar <strong>variables de color</strong> que puedas cambiar</li>
+                <li>Escribir tu propia información (nombre, colegio, proyecto)</li>
+                <li>La regla de oro: <strong>oprimir cualquier tecla cambia TODOS los colores al azar</strong></li>
+            </ul>
+        </div>
+
+        <!-- EVALUATION BANNER -->
+        <div class="eval-banner">
+            <h2> Tu tarea (evaluación periódica)</h2>
+            <p>
+                Debes crear en <strong>Processing</strong> una <strong>tarjeta de presentación</strong> 
+                (como la escarapela que se lleva en la Feria de Ciencias) usando <strong>solo figuras</strong> 
+                (rect, ellipse, line, triangle, etc.) y texto. La tarjeta debe mostrar: el nombre de la feria, 
+                tu colegio, tu grado, tu nombre y el nombre de tu proyecto. <br><br>
+                <strong>El reto especial:</strong> cada vez que oprimas <strong>cualquier tecla</strong>, 
+                los colores del fondo, de las letras y de las demás figuras deben cambiar 
+                <strong>de forma aleatoria</strong>. Observa la tarjeta de referencia de abajo y 
+                constrúyela desde cero en tu computador.
+            </p>
+        </div>
+
+        <!-- METHOD BAR -->
+        <div class="method-bar">
+            <span class="step"><span class="step-num">1</span> Observa la referencia</span>
+            <span class="arrow">→</span>
+            <span class="step"><span class="step-num">2</span> Planifica en tu cuaderno</span>
+            <span class="arrow">→</span>
+            <span class="step"><span class="step-num">3</span> Construye en Processing</span>
+            <span class="arrow">→</span>
+            <span class="step"><span class="step-num">4</span> Prueba: oprime teclas</span>
+            <span class="arrow">→</span>
+            <span class="step" style="background: rgba(231, 76, 60, 0.15); padding: 0.2rem 0.8rem; border-radius: 10px; border: 1px solid rgba(231, 76, 60, 0.3);"><span class="step-num" style="background:var(--primary);">5</span> Muéstraselo al profesor</span>
+        </div>
+
+        <!-- REFERENCE CARD -->
+        <div class="section-title">
+            <span class="num">1</span>
+            La tarjeta de referencia (mira cómo debe quedar)
+        </div>
+
+        <div class="ref-card-block">
+            <h3> Tarjeta de referencia del profesor</h3>
+            <p class="ref-sub">Esta es la tarjeta "modelo". Tú debes crear la <strong>tuya propia</strong>, 
+            con tus datos y tu estilo, pero con la misma idea y el mismo truco de los colores.</p>
+
+            <div class="ref-canvas-wrap">
+                <div class="demo-canvas wide" id="demo-t3ref"></div>
+            </div>
+            <p class="ref-keypress-hint"> Haz clic en la tarjeta y oprime cualquier tecla para ver el cambio de colores </p>
+
+            <ul class="has-list">
+                <li>Marco decorativo (rectángulo con esquinas redondeadas)</li>
+                <li>Emblema/logo hecho con figuras (aquí un átomo: círculo + órbitas)</li>
+                <li>Título: <strong>"FERIA DE CIENCIAS"</strong></li>
+                <li>Subtítulo con el colegio y el grado</li>
+                <li>Líneas para "Proyecto" y "Estudiante"</li>
+                <li>4 puntos decorativos en las esquinas</li>
+                <li><strong>Al oprimir tecla → todos los colores cambian al azar</strong></li>
+            </ul>
+        </div>
+
+        <!-- TECHNIQUE -->
+        <div class="section-title">
+            <span class="num">2</span>
+            La técnica clave: colores que cambian con teclas
+        </div>
+
+        <div class="ref-card-block" style="border-color: var(--purple);">
+            <h3 style="color: var(--purple);"> El truco que debes aprender</h3>
+            <p class="ref-sub">Para que los colores cambien, NO escribes los colores directo en la figura. 
+            Guardas cada color en una <strong>variable</strong>, y en <code>keyPressed()</code> le asignas 
+            un valor aleatorio con <code>random()</code>. Así, al oprimir tecla, ¡todo se repinta solo!</p>
+
+            <div class="notebook-step">
+                <div class="step-label">
+                    <span class="icon"></span>
+                    <h4>Copia este truco en tu cuaderno</h4>
+                </div>
+                <pre><span class="cm">// 1. Variables para guardar los colores</span>
+<span class="kw">float</span> rFondo, gFondo, bFondo;   <span class="cm">// color del fondo</span>
+<span class="kw">float</span> rTexto, gTexto, bTexto;  <span class="cm">// color de las letras</span>
+<span class="kw">float</span> rFig, gFig, bFig;        <span class="cm">// color de las figuras</span>
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">size</span>(500, 350);
+  <span class="cm">// Colores iniciales (los elijes tú)</span>
+  rFondo = 30;  gFondo = 30;  bFondo = 80;
+  rTexto = 255; gTexto = 200; bTexto = 0;
+  rFig = 46;   gFig = 204;   bFig = 113;
+}
+
+<span class="kw">void</span> <span class="fn">draw</span>() {
+  <span class="fn">background</span>(rFondo, gFondo, bFondo);  <span class="cm">// usa la variable</span>
+  <span class="cm">// ... dibuja marco, figuras y texto con las variables ...</span>
+}
+
+<span class="cm">// 2. ¡Al oprimir tecla, cambian TODOS los colores!</span>
+<span class="kw">void</span> <span class="fn">keyPressed</span>() {
+  rFondo = <span class="fn">random</span>(255);  gFondo = <span class="fn">random</span>(255);  bFondo = <span class="fn">random</span>(255);
+  rTexto = <span class="fn">random</span>(255);  gTexto = <span class="fn">random</span>(255);  bTexto = <span class="fn">random</span>(255);
+  rFig   = <span class="fn">random</span>(255);  gFig   = <span class="fn">random</span>(255);  bFig   = <span class="fn">random</span>(255);
+}</pre>
+            </div>
+
+            <div class="computer-step">
+                <div class="step-label">
+                    <span class="icon"> </span>
+                    <h4>Paso: pruébalo en Processing</h4>
+                </div>
+                <p>Escribe este truco, dibuja tu tarjeta usando las variables de color, y oprime cualquier 
+                tecla mientras el programa corre. Verás que todo cambia de color. ¡Esa es la magia!</p>
+            </div>
+
+            <details class="prof-code">
+                <summary> Código completo de la tarjeta de referencia (SOLO PARA EL PROFESOR — los alumnos no deben copiarlo)</summary>
+                <div class="notebook-step">
+                    <pre><span class="cm">// TARJETA REFERENCIA - NO COPIAR (es evaluación)</span>
+<span class="kw">float</span> rF, gF, bF, rT, gT, bT, rE, gE, bE, rM, gM, bM;
+
+<span class="kw">void</span> <span class="fn">setup</span>() {
+  <span class="fn">size</span>(500, 350);
+  rF = 30;  gF = 30;  bF = 80;
+  rT = 255; gT = 200; bT = 0;
+  rE = 46;  gE = 204; bE = 113;
+  rM = 243; gM = 156; bM = 18;
+}
+
+<span class="kw">void</span> <span class="fn">draw</span>() {
+  <span class="fn">background</span>(rF, gF, bF);
+  
+  <span class="cm">// Marco</span>
+  <span class="fn">stroke</span>(rM, gM, bM); <span class="fn">strokeWeight</span>(6); <span class="fn">noFill</span>();
+  <span class="fn">rect</span>(20, 20, width-40, height-40, 15);
+  
+  <span class="cm">// Emblema (átomo)</span>
+  <span class="fn">noStroke</span>(); <span class="fn">fill</span>(rE, gE, bE);
+  <span class="fn">ellipse</span>(width/2, 110, 40, 40);
+  <span class="fn">stroke</span>(rE, gE, bE); <span class="fn">strokeWeight</span>(3); <span class="fn">noFill</span>();
+  <span class="fn">ellipse</span>(width/2, 110, 90, 50);
+  <span class="fn">ellipse</span>(width/2, 110, 50, 90);
+  <span class="fn">noStroke</span>();
+  
+  <span class="cm">// Título y textos</span>
+  <span class="fn">fill</span>(rT, gT, bT); <span class="fn">textAlign</span>(CENTER, CENTER);
+  <span class="fn">textSize</span>(34); <span class="fn">text</span>(<span class="str">"FERIA DE CIENCIAS"</span>, width/2, 200);
+  <span class="fn">fill</span>(255); <span class="fn">textSize</span>(18);
+  <span class="fn">text</span>(<span class="str">"Institución Educativa — Grado 10°"</span>, width/2, 240);
+  <span class="fn">fill</span>(rT, gT, bT); <span class="fn">textSize</span>(16);
+  <span class="fn">text</span>(<span class="str">"Proyecto: ____________________"</span>, width/2, 280);
+  <span class="fn">text</span>(<span class="str">"Estudiante: __________________"</span>, width/2, 305);
+  
+  <span class="cm">// Esquinas decorativas</span>
+  <span class="fn">fill</span>(rE, gE, bE);
+  <span class="fn">ellipse</span>(60, 60, 12, 12); <span class="fn">ellipse</span>(width-60, 60, 12, 12);
+  <span class="fn">ellipse</span>(60, height-60, 12, 12); <span class="fn">ellipse</span>(width-60, height-60, 12, 12);
+}
+
+<span class="kw">void</span> <span class="fn">keyPressed</span>() {
+  rF = <span class="fn">random</span>(255); gF = <span class="fn">random</span>(255); bF = <span class="fn">random</span>(255);
+  rT = <span class="fn">random</span>(255); gT = <span class="fn">random</span>(255); bT = <span class="fn">random</span>(255);
+  rE = <span class="fn">random</span>(255); gE = <span class="fn">random</span>(255); bE = <span class="fn">random</span>(255);
+  rM = <span class="fn">random</span>(255); gM = <span class="fn">random</span>(255); bM = <span class="fn">random</span>(255);
+}</pre>
+                </div>
+            </details>
+        </div>
+
+        <!-- REQUIREMENTS -->
+        <div class="section-title">
+            <span class="num">3</span>
+            Qué debe tener TU tarjeta (requisitos)
+        </div>
+
+        <div class="ref-card-block" style="border-color: var(--blue);">
+            <h3 style="color: var(--blue);"> Lista de requisitos obligatorios</h3>
+            <ul class="has-list" style="grid-template-columns: 1fr;">
+                <li><strong>Figuras:</strong> mínimo usa <code>rect</code> (marco) y <code>ellipse</code> (emblema/logo), más las que quieras (líneas, triángulos, estrellas...)</li>
+                <li><strong>Texto:</strong> debe aparecer el nombre de la feria, tu colegio, tu grado, tu nombre y el nombre de tu proyecto</li>
+                <li><strong>Colores variables:</strong> el fondo, las letras y las figuras deben usar variables de color (no números fijos escritos en cada figura)</li>
+                <li><strong>keyPressed():</strong> al oprimir cualquier tecla, TODOS los colores (fondo + letras + figuras) cambian con <code>random()</code></li>
+                <li><strong>Originalidad:</strong> tu tarjeta debe ser diferente a la de referencia (otro logo, otros textos, tu propio estilo)</li>
+                <li><strong>Orden:</strong> código organizado, con comentarios, en tu cuaderno y en Processing</li>
+            </ul>
+
+            <div class="challenge">
+                <h5> Ideas para tu emblema (logo con figuras)</h5>
+                <p>• Un <strong>átomo</strong> (círculo + 2 órbitas) &nbsp;• Un <strong>planeta</strong> con anillo &nbsp;• Un <strong>escudo</strong> (rect + triángulo) &nbsp;• Una <strong>estrella</strong> de 5 puntas &nbsp;• Un <strong>engranaje</strong> &nbsp;• Un <strong>cerebro</strong> o un <strong>libro</strong> simplificado &nbsp;• Flores (como en el Taller 2)</p>
+            </div>
+        </div>
+
+        <!-- RUBRIC -->
+        <div class="rubric">
+            <h2> Rúbrica de evaluación (puntaje total 20)</h2>
+            <table>
+                <thead>
+                    <tr><th>Criterio</th><th>Descripción</th><th class="pts">Puntos</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Figuras</td><td>Usa al menos 3 tipos distintos de figuras bien ubicadas</td><td class="pts">3</td></tr>
+                    <tr><td>Texto</td><td>Aparecen feria, colegio, grado, nombre y proyecto</td><td class="pts">3</td></tr>
+                    <tr><td>Variables de color</td><td>Colores guardados en variables, no fijos por figura</td><td class="pts">4</td></tr>
+                    <tr><td>keyPressed + random</td><td>Oprimir tecla cambia TODO al azar (fondo, letras, figuras)</td><td class="pts">5</td></tr>
+                    <tr><td>Originalidad y orden</td><td>Tarjeta propia, comentada, ordenada en cuaderno y PC</td><td class="pts">3</td></tr>
+                    <tr><td>Presentación</td><td>La muestra funcionando al profesor y explica su código</td><td class="pts">2</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- STEPS TO DELIVER -->
+        <div class="section-title">
+            <span class="num">4</span>
+            Cómo entregar tu trabajo
+        </div>
+
+        <div class="ref-card-block" style="border-color: var(--accent);">
+            <div class="computer-step">
+                <div class="step-label"><span class="icon"> </span><h4>Paso 1: Planifica en tu cuaderno</h4></div>
+                <p>Dibuja en papel cómo va a quedar tu tarjeta: dónde va el título, el emblema, los textos. 
+                Anota las variables de color que vas a usar. Copia el "truco" de la sección 2 a mano.</p>
+            </div>
+            <div class="computer-step">
+                <div class="step-label"><span class="icon"> </span><h4>Paso 2: Construye en Processing</h4></div>
+                <p>Abre Processing, escribe tu código. Dibuja el marco, el emblema, los textos y la decoración 
+                usando tus variables de color. Prueba que se vea bien.</p>
+            </div>
+            <div class="computer-step">
+                <div class="step-label"><span class="icon"> </span><h4>Paso 3: Prueba las teclas</h4></div>
+                <p>Oprime varias teclas. Si todos los colores cambian al azar, ¡funciona! Si falta alguno, 
+                revisa que usaste la variable en TODAS las figuras y textos.</p>
+            </div>
+            <div class="computer-step" style="border-left-color: var(--primary); background: rgba(231, 76, 60, 0.06);">
+                <div class="step-label"><span class="icon"> </span><h4 style="color: var(--primary);">Paso 4: Muéstraselo al profesor</h4></div>
+                <p>Guarda tu archivo como <code>TuNombre_Tarjeta.pde</code>. Muestra la tarjeta funcionando 
+                (oprime teclas frente al profesor) y tu cuaderno con el plan y el código. Explica cómo 
+                funciona el <code>keyPressed()</code> con <code>random()</code>.</p>
+            </div>
+        </div>
+
+        <!-- PLAYGROUND -->
+        <div class="playground-extra">
+            <h2> Laboratorio rápido (opcional)</h2>
+            <p>Prueba el truco de los colores aquí. Oprime cualquier tecla dentro del recuadro para ver el cambio. 
+            Recuerda usar <code>p.</code> antes de cada función.</p>
+            <div class="play-area">
+                <div>
+                    <div style="background:var(--code-bg); padding:0.4rem 1rem; border-radius:10px 10px 0 0; font-size:0.8rem; color:var(--text-dim); border-bottom:1px solid var(--border);">Código (p5.js)</div>
+                    <textarea id="code-editor" spellcheck="false">let rF, gF, bF, rT, gT, bT, rE, gE, bE;
+
+p.setup = function() {
+  p.createCanvas(400, 300);
+  rF = 30; gF = 30; bF = 80;
+  rT = 255; gT = 200; bT = 0;
+  rE = 46; gE = 204; bE = 113;
+};
+
+p.draw = function() {
+  p.background(rF, gF, bF);
+  p.stroke(rE, gE, bE);
+  p.strokeWeight(5);
+  p.noFill();
+  p.rect(20, 20, p.width-40, p.height-40, 12);
+  p.noStroke();
+  p.fill(rE, gE, bE);
+  p.ellipse(p.width/2, 100, 40, 40);
+  p.fill(rT, gT, bT);
+  p.textAlign(p.CENTER, p.CENTER);
+  p.textSize(26);
+  p.text("FERIA DE CIENCIAS", p.width/2, 200);
+};
+
+p.keyPressed = function() {
+  rF = p.random(255); gF = p.random(255); bF = p.random(255);
+  rT = p.random(255); gT = p.random(255); bT = p.random(255);
+  rE = p.random(255); gE = p.random(255); bE = p.random(255);
+};</textarea>
+                </div>
+                <div>
+                    <div style="background:#111; padding:0.4rem 1rem; border-radius:10px 10px 0 0; font-size:0.8rem; color:var(--text-dim); border-bottom:1px solid var(--border);">Resultado (oprime tecla)</div>
+                    <div class="p-canvas" id="playground-canvas">
+                        <div class="placeholder" id="playground-placeholder">
+                            Haz clic aquí y oprime una tecla
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-controls">
+                <button onclick="runPlayground()"> Ejecutar</button>
+                <button class="sec" onclick="resetPlayground()"> Reiniciar</button>
+                <div class="err" id="playground-error"></div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        <p>Taller Gradécimo Processing &bull; Taller 3: Tarjeta de Presentación (Evaluación) &bull; Feria de Ciencias</p>
+    </footer>
+
+    <!-- BLOQUEAR COPIA -->
+    <script>
+    document.querySelectorAll('.notebook-step pre').forEach(el => {
+        el.addEventListener('copy', (e) => {
+            e.preventDefault();
+            alert('✋ No puedes copiar este código. ¡Cópialo a mano en tu cuaderno!');
+            return false;
+        });
+        el.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            alert('✋ No puedes copiar este código. ¡Escríbelo a mano!');
+            return false;
+        });
+        el.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && (e.key === 'c' || e.key === 'C' || e.key === 'a' || e.key === 'A')) {
+                e.preventDefault();
+                alert('✋ No puedes copiar este código. ¡Cópialo a mano en tu cuaderno!');
+                return false;
+            }
+        });
+        el.addEventListener('selectstart', (e) => {
+            e.preventDefault();
+            return false;
+        });
+    });
+    </script>
+
+    <!-- DEMO REFERENCIA -->
+    <script>
+    new p5((p) => {
+        let rF, gF, bF, rT, gT, bT, rE, gE, bE, rM, gM, bM;
+        p.setup = function() {
+            let c = p.createCanvas(500, 350);
+            c.parent('demo-t3ref');
+            rF = 30; gF = 30; bF = 80;
+            rT = 255; gT = 200; bT = 0;
+            rE = 46; gE = 204; bE = 113;
+            rM = 243; gM = 156; bM = 18;
+        };
+        p.draw = function() {
+            p.background(rF, gF, bF);
+
+            p.stroke(rM, gM, bM);
+            p.strokeWeight(6);
+            p.noFill();
+            p.rect(20, 20, p.width-40, p.height-40, 15);
+
+            p.noStroke();
+            p.fill(rE, gE, bE);
+            p.ellipse(p.width/2, 110, 40, 40);
+            p.stroke(rE, gE, bE);
+            p.strokeWeight(3);
+            p.noFill();
+            p.ellipse(p.width/2, 110, 90, 50);
+            p.ellipse(p.width/2, 110, 50, 90);
+            p.noStroke();
+
+            p.fill(rT, gT, bT);
+            p.textAlign(p.CENTER, p.CENTER);
+            p.textSize(34);
+            p.text("FERIA DE CIENCIAS", p.width/2, 200);
+
+            p.fill(255);
+            p.textSize(18);
+            p.text("Institución Educativa — Grado 10°", p.width/2, 240);
+
+            p.fill(rT, gT, bT);
+            p.textSize(16);
+            p.text("Proyecto: ____________________", p.width/2, 278);
+            p.text("Estudiante: __________________", p.width/2, 303);
+
+            p.fill(rE, gE, bE);
+            p.ellipse(60, 60, 12, 12);
+            p.ellipse(p.width-60, 60, 12, 12);
+            p.ellipse(60, p.height-60, 12, 12);
+            p.ellipse(p.width-60, p.height-60, 12, 12);
+        };
+        p.keyPressed = function() {
+            rF = p.random(255); gF = p.random(255); bF = p.random(255);
+            rT = p.random(255); gT = p.random(255); bT = p.random(255);
+            rE = p.random(255); gE = p.random(255); bE = p.random(255);
+            rM = p.random(255); gM = p.random(255); bM = p.random(255);
+        };
+    });
+
+    // ===== PLAYGROUND =====
+    let pgSketch = null;
+    function runPlayground() {
+        const code = document.getElementById('code-editor').value;
+        const errEl = document.getElementById('playground-error');
+        const ph = document.getElementById('playground-placeholder');
+        if (pgSketch) { pgSketch.remove(); pgSketch = null; }
+        ph.style.display = 'none';
+        errEl.classList.remove('show');
+        try {
+            const fn = new Function('p', code);
+            pgSketch = new p5((p) => {
+                try { fn(p); } catch(e) { console.error(e); }
+            }, 'playground-canvas');
+        } catch(e) {
+            errEl.textContent = ' Error: ' + e.message;
+            errEl.classList.add('show');
+            ph.style.display = 'block';
+        }
+    }
+    function resetPlayground() {
+        if (pgSketch) { pgSketch.remove(); pgSketch = null; }
+        document.getElementById('code-editor').value =
+`let rF, gF, bF, rT, gT, bT, rE, gE, bE;
+
+p.setup = function() {
+  p.createCanvas(400, 300);
+  rF = 30; gF = 30; bF = 80;
+  rT = 255; gT = 200; bT = 0;
+  rE = 46; gE = 204; bE = 113;
+};
+
+p.draw = function() {
+  p.background(rF, gF, bF);
+  p.stroke(rE, gE, bE);
+  p.strokeWeight(5);
+  p.noFill();
+  p.rect(20, 20, p.width-40, p.height-40, 12);
+  p.noStroke();
+  p.fill(rE, gE, bE);
+  p.ellipse(p.width/2, 100, 40, 40);
+  p.fill(rT, gT, bT);
+  p.textAlign(p.CENTER, p.CENTER);
+  p.textSize(26);
+  p.text("FERIA DE CIENCIAS", p.width/2, 200);
+};
+
+p.keyPressed = function() {
+  rF = p.random(255); gF = p.random(255); bF = p.random(255);
+  rT = p.random(255); gT = p.random(255); bT = p.random(255);
+  rE = p.random(255); gE = p.random(255); bE = p.random(255);
+};`;
+        document.getElementById('playground-error').classList.remove('show');
+        document.getElementById('playground-placeholder').style.display = 'block';
+    }
+    </script>
+
+</body>
+</html>
