@@ -172,6 +172,10 @@
         .compare-table th { color: var(--primary); font-weight: 700; }
         .compare-table td { color: var(--text-dim); }
 
+        /* IMÁGENES DEL TALLER */
+        .taller-img { width: 100%; max-width: 520px; border-radius: 12px; border: 1px solid var(--border); display: block; margin: 0 auto; background: white; }
+        .img-caption { color: var(--text-dim); font-size: 0.8rem; margin-top: 0.4rem; font-style: italic; }
+
         footer { text-align: center; padding: 2rem; color: #445; font-size: 0.85rem; border-top: 1px solid var(--border); }
 
         @media (max-width: 750px) {
@@ -262,6 +266,11 @@
                 </div>
             </div>
 
+            <figure style="margin: 1rem 0; text-align: center;">
+                <img src="imagenes_taller4/01_cable_utp.png" alt="Cable UTP con sus 4 pares de hilos de colores" class="taller-img">
+                <figcaption class="img-caption">Cable UTP abierto: se ven los pares de hilos de colores dentro de la cubierta gris</figcaption>
+            </figure>
+
             <div class="notebook-step">
                 <div class="step-label">
                     <span class="icon"></span>
@@ -287,7 +296,7 @@
 
         <div class="card">
             <h3> Conector RJ-45</h3>
-            <p>El conector rectangular de 8 pines que se Inserta en los puertos de red. Tiene un <strong>contacto metálico</strong> en cada pin que toca el hilo del cable cuando se crimpea. Los pines se numeran del 1 al 8 (mirando el conector con el contacto hacia arriba y la pestaña hacia abajo).</p>
+            <p>El conector rectangular de 8 pines que se inserta en los puertos de red. Tiene un <strong>contacto metálico</strong> en cada pin que toca el hilo del cable cuando se crimpea. Los pines se numeran del 1 al 8 (mirando el conector con el contacto hacia arriba y la pestaña hacia abajo).</p>
             <div style="text-align: center; margin: 1rem 0;">
                 <div style="display: inline-flex; background: #1a1a2e; padding: 1rem 1.5rem; border-radius: 12px; border: 1px solid var(--border);">
                     <div style="display: flex; gap: 4px; align-items: flex-end;">
@@ -311,8 +320,12 @@
                     <span style="width:14px; text-align:center; font-size:0.6rem; color: var(--text-dim);">7</span>
                     <span style="width:14px; text-align:center; font-size:0.6rem; color: var(--text-dim);">8</span>
                 </div>
-                <p style="color: var(--text-dim); font-size: 0.8rem; margin-top: 0.5rem;">Conector RJ-45 mirando los contactos (pstaba abajo)</p>
+                <p style="color: var(--text-dim); font-size: 0.8rem; margin-top: 0.5rem;">Conector RJ-45 mirando los contactos (pestaña abajo)</p>
             </div>
+            <figure style="margin: 1rem 0; text-align: center;">
+                <img src="imagenes_taller4/02_conector_rj45.png" alt="Conector RJ-45 real con sus 8 pines dorados" class="taller-img">
+                <figcaption class="img-caption">Así es un conector RJ-45 real: 8 pines dorados y la pestaña de seguridad</figcaption>
+            </figure>
         </div>
 
         <!-- ===== SECCIÓN 2: ESTÁNDARES ===== -->
@@ -364,6 +377,11 @@
                 </div>
             </div>
 
+            <figure style="margin: 1rem 0; text-align: center;">
+                <img src="imagenes_taller4/03_t568b.png" alt="Hilos de colores estirados y paralelos" class="taller-img">
+                <figcaption class="img-caption">Ilustración: los hilos deben quedar estirados y paralelos, sin cruzarse (el orden exacto T568B está en la tabla de arriba)</figcaption>
+            </figure>
+
             <div class="notebook-step">
                 <div class="step-label">
                     <span class="icon"></span>
@@ -409,7 +427,7 @@ Pin 8: <span class="hl">Marrón</span>          (marrón sólido)
             <div class="tool-item">
                 <div class="icon"> ️</div>
                 <h4>Crimadora</h4>
-                <p>Herramienta que Inserta y fija el conector al cable.</p>
+                <p>Herramienta que inserta y fija el conector al cable.</p>
             </div>
             <div class="tool-item">
                 <div class="icon"> </div>
@@ -421,6 +439,14 @@ Pin 8: <span class="hl">Marrón</span>          (marrón sólido)
                 <h4>Cortador / Tijeras</h4>
                 <p>Para cortar el cable y alinear los hilos.</p>
             </div>
+        </div>
+
+        <div class="card">
+            <h3>Nuestras herramientas en el taller</h3>
+            <figure style="margin: 0.5rem 0 0; text-align: center;">
+                <img src="imagenes_taller4/04_herramientas.png" alt="Pelador, crimpadora y cable de red" class="taller-img">
+                <figcaption class="img-caption">Pelador amarillo, crimpadora azul y cable UTP: con esto trabajaremos hoy</figcaption>
+            </figure>
         </div>
 
         <!-- ===== SECCIÓN 4: PRÁCTICA ===== -->
@@ -448,6 +474,10 @@ Pin 8: <span class="hl">Marrón</span>          (marrón sólido)
             <div class="practice-step">
                 <div class="step-label"><span class="icon"> </span><h4>Ahora en la práctica</h4></div>
                 <p>Toma el pelador, coloca el cable dentro, gira una vuelta suave y tira de la cubierta. Si ves los 8 hilos intactos, ¡lo hiciste bien!</p>
+                <figure style="margin: 0.8rem 0 0; text-align: center;">
+                    <img src="imagenes_taller4/05_pelar.png" alt="Pelando la cubierta del cable UTP" class="taller-img">
+                    <figcaption class="img-caption">Así se pela la cubierta: aparecen los hilos de colores trenzados</figcaption>
+                </figure>
             </div>
 
             <!-- PASO 2 -->
@@ -474,6 +504,10 @@ Pin 8: <span class="hl">Marrón</span>          (marrón sólido)
             <div class="practice-step">
                 <div class="step-label"><span class="icon"> </span><h4>Ahora en la práctica</h4></div>
                 <p>Es el paso más importante. Tómate tu tiempo. Los hilos deben quedar <strong>paralelos, sin cruzarse</strong>, en el orden exacto. Pídele a tu compañero que verifique.</p>
+                <figure style="margin: 0.8rem 0 0; text-align: center;">
+                    <img src="imagenes_taller4/06_ordenar.png" alt="Hilos ordenados y paralelos listos para Insertar" class="taller-img">
+                    <figcaption class="img-caption">Hilos ordenados por color, con las puntas de cobre listas para entrar al conector</figcaption>
+                </figure>
             </div>
 
             <!-- PASO 3 -->
@@ -494,7 +528,7 @@ Pin 8: <span class="hl">Marrón</span>          (marrón sólido)
             </div>
             <div class="practice-step">
                 <div class="step-label"><span class="icon"> </span><h4>Ahora en la práctica</h4></div>
-                <p>Mira el conector por transparencia: ¿ves los 8 colores en orden? ¿Llegan al fondo? Si no estás seguro, <strong>saca y vuelve a Insertar</strong>. Es mejor hacerlo bien que rápido.</p>
+                <p>Mira el conector por transparencia: ¿ves los 8 colores en orden? ¿Llegan al fondo? Si no estás seguro, <strong>saca y vuelve a insertar</strong>. Es mejor hacerlo bien que rápido.</p>
             </div>
 
             <!-- PASO 4 -->
@@ -515,6 +549,10 @@ Pin 8: <span class="hl">Marrón</span>          (marrón sólido)
             <div class="practice-step">
                 <div class="step-label"><span class="icon"> </span><h4>Ahora en la práctica</h4></div>
                 <p>Coloca el conector en la ranura correcta (la ranura para RJ-45, que es la más grande). Presiona con fuerza uniforme. Si suena un "click" o la herramienta llega al fondo, ¡listo!</p>
+                <figure style="margin: 0.8rem 0 0; text-align: center;">
+                    <img src="imagenes_taller4/07_crimpear.png" alt="Crimpando el conector RJ-45 con la crimpadora" class="taller-img">
+                    <figcaption class="img-caption">La crimpadora fija el conector al cable con un solo apretón fuerte</figcaption>
+                </figure>
             </div>
 
             <!-- PASO 5 -->
@@ -554,6 +592,10 @@ Pin 8: <span class="hl">Marrón</span>          (marrón sólido)
             <div class="teacher-step">
                 <div class="step-label"><span class="icon"> </span><h4>Muéstraselo al profesor</h4></div>
                 <p>Muestra el cable con sus dos conectores y el <strong>tester funcionando</strong> (todos los 8 verdes). Lleva tu cuaderno con los pasos copiados y el diagrama de colores dibujado.</p>
+                <figure style="margin: 0.8rem 0 0; text-align: center;">
+                    <img src="imagenes_taller4/08_tester.png" alt="Tester de cable con luces verdes encendidas" class="taller-img">
+                    <figcaption class="img-caption">Tester con todas las luces en verde: ¡cable funcionando!</figcaption>
+                </figure>
             </div>
         </div>
 
@@ -625,7 +667,7 @@ Pin 8: <span class="hl">Marrón</span>          (marrón sólido)
             </ul>
             <div class="challenge" style="margin-top: 1rem;">
                 <h5> Reto extra (opcional)</h5>
-                <p>Si te sobra tiempo, haz un <strong>second cable</strong> de otra longitud (50 cm o 2 metros) o intenta hacer un <strong>cable cruzado</strong> (un extremo T568A, el otro T568B).</p>
+                <p>Si te sobra tiempo, haz un <strong>segundo cable</strong> de otra longitud (50 cm o 2 metros) o intenta hacer un <strong>cable cruzado</strong> (un extremo T568A, el otro T568B).</p>
             </div>
         </div>
 
