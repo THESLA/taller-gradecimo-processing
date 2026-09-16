@@ -176,6 +176,28 @@
         .taller-img { width: 100%; max-width: 520px; border-radius: 12px; border: 1px solid var(--border); display: block; margin: 0 auto; background: white; }
         .img-caption { color: var(--text-dim); font-size: 0.8rem; margin-top: 0.4rem; font-style: italic; }
 
+        /* HILOS RAYADOS (blanco + color del par) */
+        .stripe-naranja { background: repeating-linear-gradient(135deg, #ffffff 0px, #ffffff 5px, #f39c12 5px, #f39c12 10px); }
+        .stripe-verde { background: repeating-linear-gradient(135deg, #ffffff 0px, #ffffff 5px, #27ae60 5px, #27ae60 10px); }
+        .stripe-azul { background: repeating-linear-gradient(135deg, #ffffff 0px, #ffffff 5px, #2980b9 5px, #2980b9 10px); }
+        .stripe-marron { background: repeating-linear-gradient(135deg, #ffffff 0px, #ffffff 5px, #795548 5px, #795548 10px); }
+
+        /* TARJETAS DE PARES */
+        .pair-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.8rem; margin-top: 0.8rem; }
+        .pair-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 12px; padding: 0.8rem; text-align: center; }
+        .pair-title { font-weight: 800; color: var(--primary); font-size: 0.9rem; margin-bottom: 0.5rem; }
+        .pair-wires { display: flex; gap: 8px; justify-content: center; margin-bottom: 0.5rem; }
+        .wire-sample { width: 36px; height: 74px; border-radius: 7px; border: 1px solid rgba(255,255,255,0.25); }
+        .pair-names { font-size: 0.78rem; color: var(--text-dim); line-height: 1.5; }
+        .pair-names strong { color: var(--text); }
+
+        /* DIAGRAMA T568B MEJORADO */
+        .cable-diagram { overflow-x: auto; }
+        .wire-big { width: 46px; height: 132px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.25); }
+        .pin-badge { background: var(--secondary); color: white; font-weight: 800; font-size: 0.9rem; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .wire-fullname { font-size: 0.72rem; font-weight: 800; text-align: center; line-height: 1.25; max-width: 92px; }
+        .wire-pair { font-size: 0.65rem; color: var(--text-dim); background: rgba(255,255,255,0.06); border: 1px solid var(--border); padding: 0.1rem 0.5rem; border-radius: 10px; }
+
         footer { text-align: center; padding: 2rem; color: #445; font-size: 0.85rem; border-top: 1px solid var(--border); }
 
         @media (max-width: 750px) {
@@ -247,22 +269,26 @@
         <div class="card">
             <h3> Cable UTP (Par Trenzado Sin Apantallar)</h3>
             <p>El cable más común en redes locales. Tiene <strong>4 pares de hilos</strong> (8 hilos en total), cada par trenzado entre sí para reducir interferencias. Los pares tienen colores específicos:</p>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 0.8rem;">
-                <div style="display: flex; align-items: center; gap: 0.5rem;">
-                    <div style="width:20px; height:20px; border-radius:4px; background: var(--c-naranjab); border:1px solid #ccc;"></div>
-                    <span style="color: var(--text-dim); font-size: 0.85rem;">Par 1: Naranja-Blanco / Naranja</span>
+            <div class="pair-grid">
+                <div class="pair-card">
+                    <div class="pair-title">Par 1</div>
+                    <div class="pair-wires"><div class="wire-sample stripe-naranja"></div><div class="wire-sample" style="background:#f39c12;"></div></div>
+                    <div class="pair-names"><strong style="color:#f5b041;">Naranja-Blanco</strong> (rayado)<br><strong style="color:#f39c12;">Naranja</strong> (sólido)</div>
                 </div>
-                <div style="display: flex; align-items: center; gap: 0.5rem;">
-                    <div style="width:20px; height:20px; border-radius:4px; background: var(--c-verdeb); border:1px solid #ccc;"></div>
-                    <span style="color: var(--text-dim); font-size: 0.85rem;">Par 2: Verde-Blanco / Verde</span>
+                <div class="pair-card">
+                    <div class="pair-title">Par 2</div>
+                    <div class="pair-wires"><div class="wire-sample stripe-verde"></div><div class="wire-sample" style="background:#27ae60;"></div></div>
+                    <div class="pair-names"><strong style="color:#58d68d;">Verde-Blanco</strong> (rayado)<br><strong style="color:#2ecc71;">Verde</strong> (sólido)</div>
                 </div>
-                <div style="display: flex; align-items: center; gap: 0.5rem;">
-                    <div style="width:20px; height:20px; border-radius:4px; background: var(--c-azulb); border:1px solid #ccc;"></div>
-                    <span style="color: var(--text-dim); font-size: 0.85rem;">Par 3: Azul-Blanco / Azul</span>
+                <div class="pair-card">
+                    <div class="pair-title">Par 3</div>
+                    <div class="pair-wires"><div class="wire-sample stripe-azul"></div><div class="wire-sample" style="background:#2980b9;"></div></div>
+                    <div class="pair-names"><strong style="color:#85c1e9;">Azul-Blanco</strong> (rayado)<br><strong style="color:#5dade2;">Azul</strong> (sólido)</div>
                 </div>
-                <div style="display: flex; align-items: center; gap: 0.5rem;">
-                    <div style="width:20px; height:20px; border-radius:4px; background: var(--c-marronb); border:1px solid #ccc;"></div>
-                    <span style="color: var(--text-dim); font-size: 0.85rem;">Par 4: Marrón-Blanco / Marrón</span>
+                <div class="pair-card">
+                    <div class="pair-title">Par 4</div>
+                    <div class="pair-wires"><div class="wire-sample stripe-marron"></div><div class="wire-sample" style="background:#795548;"></div></div>
+                    <div class="pair-names"><strong style="color:#d7b98e;">Marrón-Blanco</strong> (rayado)<br><strong style="color:#b07d4f;">Marrón</strong> (sólido)</div>
                 </div>
             </div>
 
@@ -300,14 +326,14 @@
             <div style="text-align: center; margin: 1rem 0;">
                 <div style="display: inline-flex; background: #1a1a2e; padding: 1rem 1.5rem; border-radius: 12px; border: 1px solid var(--border);">
                     <div style="display: flex; gap: 4px; align-items: flex-end;">
-                        <div style="width:14px; height:30px; background: var(--c-naranjab); border-radius:2px;"></div>
-                        <div style="width:14px; height:30px; background: var(--c-naranja); border-radius:2px;"></div>
-                        <div style="width:14px; height:30px; background: var(--c-verdeb); border-radius:2px;"></div>
-                        <div style="width:14px; height:30px; background: var(--c-azul); border-radius:2px;"></div>
-                        <div style="width:14px; height:30px; background: var(--c-azulb); border-radius:2px;"></div>
-                        <div style="width:14px; height:30px; background: var(--c-verde); border-radius:2px;"></div>
-                        <div style="width:14px; height:30px; background: var(--c-marronb); border-radius:2px;"></div>
-                        <div style="width:14px; height:30px; background: var(--c-marron); border-radius:2px;"></div>
+                        <div class="stripe-naranja" style="width:14px; height:30px; border-radius:2px;"></div>
+                        <div style="width:14px; height:30px; background: #f39c12; border-radius:2px;"></div>
+                        <div class="stripe-verde" style="width:14px; height:30px; border-radius:2px;"></div>
+                        <div style="width:14px; height:30px; background: #2980b9; border-radius:2px;"></div>
+                        <div class="stripe-azul" style="width:14px; height:30px; border-radius:2px;"></div>
+                        <div style="width:14px; height:30px; background: #27ae60; border-radius:2px;"></div>
+                        <div class="stripe-marron" style="width:14px; height:30px; border-radius:2px;"></div>
+                        <div style="width:14px; height:30px; background: #795548; border-radius:2px;"></div>
                     </div>
                 </div>
                 <div style="display: flex; gap: 4px; justify-content: center; margin-top: 4px;">
@@ -364,16 +390,16 @@
             <p style="margin-bottom: 1rem;">Así se ven los 8 hilos ordenados de izquierda a derecha dentro del conector:</p>
 
             <div class="cable-diagram">
-                <div class="cable-label b">ESTÁNDAR T568B</div>
+                <div class="cable-label b">ESTÁNDAR T568B — de izquierda a derecha</div>
                 <div class="wire-row">
-                    <div class="wire-col"><div class="wire-num">1</div><div class="wire" style="background: var(--c-naranjab); width:36px; height:110px; border-radius:6px;"></div><div class="wire-name" style="writing-mode: horizontal-tb; height:auto; font-size:0.65rem;">Naranja-Blanco</div></div>
-                    <div class="wire-col"><div class="wire-num">2</div><div class="wire" style="background: var(--c-naranja); width:36px; height:110px; border-radius:6px;"></div><div class="wire-name" style="writing-mode: horizontal-tb; height:auto; font-size:0.65rem;">Naranja</div></div>
-                    <div class="wire-col"><div class="wire-num">3</div><div class="wire" style="background: var(--c-verdeb); width:36px; height:110px; border-radius:6px;"></div><div class="wire-name" style="writing-mode: horizontal-tb; height:auto; font-size:0.65rem;">Verde-Blanco</div></div>
-                    <div class="wire-col"><div class="wire-num">4</div><div class="wire" style="background: var(--c-azul); width:36px; height:110px; border-radius:6px;"></div><div class="wire-name" style="writing-mode: horizontal-tb; height:auto; font-size:0.65rem;">Azul</div></div>
-                    <div class="wire-col"><div class="wire-num">5</div><div class="wire" style="background: var(--c-azulb); width:36px; height:110px; border-radius:6px;"></div><div class="wire-name" style="writing-mode: horizontal-tb; height:auto; font-size:0.65rem;">Azul-Blanco</div></div>
-                    <div class="wire-col"><div class="wire-num">6</div><div class="wire" style="background: var(--c-verde); width:36px; height:110px; border-radius:6px;"></div><div class="wire-name" style="writing-mode: horizontal-tb; height:auto; font-size:0.65rem;">Verde</div></div>
-                    <div class="wire-col"><div class="wire-num">7</div><div class="wire" style="background: var(--c-marronb); width:36px; height:110px; border-radius:6px;"></div><div class="wire-name" style="writing-mode: horizontal-tb; height:auto; font-size:0.65rem;">Marrón-Blanco</div></div>
-                    <div class="wire-col"><div class="wire-num">8</div><div class="wire" style="background: var(--c-marron); width:36px; height:110px; border-radius:6px;"></div><div class="wire-name" style="writing-mode: horizontal-tb; height:auto; font-size:0.65rem;">Marrón</div></div>
+                    <div class="wire-col"><div class="pin-badge">1</div><div class="wire-big stripe-naranja"></div><div class="wire-fullname" style="color:#f5b041;">Naranja-Blanco</div><div class="wire-pair">Par 1</div></div>
+                    <div class="wire-col"><div class="pin-badge">2</div><div class="wire-big" style="background:#f39c12;"></div><div class="wire-fullname" style="color:#f39c12;">Naranja</div><div class="wire-pair">Par 1</div></div>
+                    <div class="wire-col"><div class="pin-badge">3</div><div class="wire-big stripe-verde"></div><div class="wire-fullname" style="color:#58d68d;">Verde-Blanco</div><div class="wire-pair">Par 2</div></div>
+                    <div class="wire-col"><div class="pin-badge">4</div><div class="wire-big" style="background:#2980b9;"></div><div class="wire-fullname" style="color:#5dade2;">Azul</div><div class="wire-pair">Par 3</div></div>
+                    <div class="wire-col"><div class="pin-badge">5</div><div class="wire-big stripe-azul"></div><div class="wire-fullname" style="color:#85c1e9;">Azul-Blanco</div><div class="wire-pair">Par 3</div></div>
+                    <div class="wire-col"><div class="pin-badge">6</div><div class="wire-big" style="background:#27ae60;"></div><div class="wire-fullname" style="color:#2ecc71;">Verde</div><div class="wire-pair">Par 2</div></div>
+                    <div class="wire-col"><div class="pin-badge">7</div><div class="wire-big stripe-marron"></div><div class="wire-fullname" style="color:#d7b98e;">Marrón-Blanco</div><div class="wire-pair">Par 4</div></div>
+                    <div class="wire-col"><div class="pin-badge">8</div><div class="wire-big" style="background:#795548;"></div><div class="wire-fullname" style="color:#b07d4f;">Marrón</div><div class="wire-pair">Par 4</div></div>
                 </div>
             </div>
 
